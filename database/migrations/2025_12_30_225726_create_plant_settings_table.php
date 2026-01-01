@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('plant_settings', function (Blueprint $table) {
             $table->id();
             $table->string('plant_name')->default('Selada');
-            $table->integer('target_ppm')->default(800);
+            $table->dateTime('started_at')->useCurrent();
 
-            // Enum untuk bentuk tandon
+            $table->integer('target_ppm')->default(800);
             $table->enum('tank_shape', ['kotak', 'tabung'])->default('kotak');
 
-            // Dimensi (Nullable karena tergantung bentuk)
+            // Dimensi
             $table->double('tank_length')->nullable();
             $table->double('tank_width')->nullable();
             $table->double('tank_diameter')->nullable();
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->double('tank_height_cm')->default(30);
             $table->double('nutrient_strength')->default(200);
 
-            $table->timestamps(); // created_at & updated_at
+            $table->timestamps();
         });
     }
 

@@ -16,8 +16,9 @@ class PlantSetting extends Model
         'tank_width'     => 'float', // Baru
         'tank_diameter'  => 'float', // Baru
         'last_alert_at'  => 'datetime',
+        'started_at' => 'datetime', // <--- INI KUNCINYA
     ];
-
+    
     // Helper: Hitung Luas Alas secara otomatis
     // Ini akan mempermudah kita di Worker nanti
     public function getBaseAreaAttribute()

@@ -10,27 +10,27 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-
     public function index()
     {
-        // 1. Ambil Settingan (Untuk tahu kapan masa tanam dimulai)
         $setting = PlantSetting::first();
 
-        // Safety check jika setting belum ada
+        // Auto-fix jika started_at kosong
+        if ($setting && !$setting->started_at) {
+            $setting->update(['started_at' => now()]);
+        }
+
+        // 1. Ambil Device
+        $device = Device::where('mqtt_topic', 'hidroponik/telemetry')->first();
+
+        // Safety Check
         if (!$setting) {
             return view('dashboard', [
-                'device' => null,
-                'labels' => [],
-                'values' => [],
-                'setting' => null,
-                'stats' => null
+                'device' => null, 'labels' => [], 'values' => [],
+                'setting' => null, 'stats' => null
             ]);
         }
 
-        // 2. Ambil Device
-        $device = Device::where('mqtt_topic', 'hidroponik/telemetry')->first();
-
-        // Data Grafik (Logic Lama)
+        // 2. Ambil Data Grafik (20 data terakhir)
         $data = collect([]);
         if ($device) {
             $data = Telemetry::where('device_id', $device->id)
@@ -43,35 +43,8 @@ class DashboardController extends Controller
         $labels = $data->pluck('received_at')->map(fn($d) => $d->format('H:i:s'));
         $values = $data->pluck('tds_ppm');
 
-        // --- 3. LOGIKA STATISTIK (FITUR BARU) ---
-        // Kita siapkan array kosong dulu
-        $stats = [
-            'today_max_temp' => 0,
-            'today_min_temp' => 0,
-            'plant_max_temp' => 0,
-            'plant_min_temp' => 0,
-            'plant_max_ppm'  => 0,
-            'plant_start_date' => $setting->updated_at->format('d M Y'), // Tgl Tanam
-            'plant_age_days'   => (int)$setting->updated_at->diffInDays(now()), // Umur Tanaman
-        ];
-
-        if ($device) {
-            // A. Statistik HARI INI
-            $todayData = Telemetry::where('device_id', $device->id)
-                ->whereDate('received_at', Carbon::today());
-
-            $stats['today_max_temp'] = $todayData->max('suhu') ?? 0;
-            $stats['today_min_temp'] = $todayData->min('suhu') ?? 0;
-
-            // B. Statistik PERIODE TANAMAN SAAT INI
-            // (Data diambil sejak terakhir kali tombol Simpan diklik)
-            $plantData = Telemetry::where('device_id', $device->id)
-                ->where('received_at', '>=', $setting->updated_at);
-
-            $stats['plant_max_temp'] = $plantData->max('suhu') ?? 0;
-            $stats['plant_min_temp'] = $plantData->min('suhu') ?? 0;
-            $stats['plant_max_ppm']  = $plantData->max('tds_ppm') ?? 0;
-        }
+        // 3. Logika Statistik Sederhana
+        $stats = $this->calculateStats($device, $setting);
 
         return view('dashboard', compact('device', 'labels', 'values', 'setting', 'stats'));
     }
@@ -80,80 +53,60 @@ class DashboardController extends Controller
     {
         $device = Device::where('mqtt_topic', 'hidroponik/telemetry')->first();
 
-        // Default response jika device/data tidak ada
         if (!$device) {
             return response()->json([
-                'labels' => [],
-                'ppm' => [],
-                'temp' => [],
-                'ka_message' => 'Menunggu koneksi alat...',
-                'ka_status'  => 'WAITING',
-                'is_online'  => false // <--- TAMBAHAN: Default Offline
+                'labels' => [], 'ppm' => [], 'temp' => [],
+                'ka_message' => 'Menunggu koneksi...', 'ka_status' => 'WAITING',
+                'is_online' => false
             ]);
         }
 
-        // Ambil data
         $data = Telemetry::where('device_id', $device->id)
             ->orderBy('received_at', 'desc')
-            ->take(20)
-            ->get();
+            ->take(20)->get();
 
         $latest = $data->first();
         $sortedData = $data->sortBy('received_at');
 
-        // --- LOGIKA CEK ONLINE/OFFLINE ---
-        $isOnline = false;
-        if ($latest) {
-            // Hitung selisih waktu sekarang dengan data terakhir
-            // Jika selisih kurang dari 60 detik, anggap ONLINE
-            if ($latest->received_at->diffInSeconds(now()) < 60) {
-                $isOnline = true;
-            }
-        }
+        // Cek Online (toleransi 60 detik)
+        $isOnline = $latest && $latest->received_at->diffInSeconds(now()) < 60;
 
         return response()->json([
             'labels' => $sortedData->pluck('received_at')->map(fn($d) => $d->format('H:i:s')),
             'ppm'    => $sortedData->pluck('tds_ppm'),
             'temp'   => $sortedData->pluck('suhu'),
-            'ka_message' => $latest ? $latest->ka_message : 'Menunggu data sensor...',
+            'ka_message' => $latest ? $latest->ka_message : '...',
             'ka_status'  => $latest ? $latest->ka_status : 'WAITING',
-
-            'is_online'  => $isOnline // <--- KIRIM STATUS KE VIEW
+            'is_online'  => $isOnline
         ]);
     }
 
-    // Fungsi untuk update setting yang tadi kita buat
-    public function updateSettings(Request $request)
+    // Private method agar index() tidak penuh sesak
+    private function calculateStats($device, $setting)
     {
-        $request->validate([
-            'plant_name'      => 'required|string|max:50',
-            'target_ppm'      => 'required|numeric|min:0',
-            'tank_height_cm'  => 'required|numeric|min:1',
-            'tank_shape'      => 'required|in:kotak,tabung',
-            'tank_length'     => 'nullable|required_if:tank_shape,kotak|numeric',
-            'tank_width'      => 'nullable|required_if:tank_shape,kotak|numeric',
-            'tank_diameter'   => 'nullable|required_if:tank_shape,tabung|numeric',
-        ]);
+        $stats = [
+            'today_max_temp' => 0, 'today_min_temp' => 0,
+            'plant_max_temp' => 0, 'plant_min_temp' => 0, 'plant_max_ppm' => 0,
+            'plant_start_date' => $setting->started_at ? $setting->started_at->format('d M Y') : '-',
+            'plant_age_days'   => $setting->started_at ? (int)$setting->started_at->diffInDays(now()) : 0,
+        ];
 
-        $setting = PlantSetting::firstOrNew(['id' => 1]);
+        if ($device) {
+            // Harian
+            $todayData = Telemetry::where('device_id', $device->id)->whereDate('received_at', Carbon::today());
+            $stats['today_max_temp'] = $todayData->max('suhu') ?? 0;
+            $stats['today_min_temp'] = $todayData->min('suhu') ?? 0;
 
-        $setting->plant_name     = $request->plant_name;
-        $setting->target_ppm     = $request->target_ppm;
-        $setting->tank_height_cm = $request->tank_height_cm;
-        $setting->tank_shape     = $request->tank_shape;
+            // Per Periode Tanam
+            if ($setting->started_at) {
+                $plantData = Telemetry::where('device_id', $device->id)
+                    ->where('received_at', '>=', $setting->started_at);
 
-        if ($request->tank_shape == 'kotak') {
-            $setting->tank_length = $request->tank_length;
-            $setting->tank_width  = $request->tank_width;
-            $setting->tank_diameter = null;
-        } else {
-            $setting->tank_diameter = $request->tank_diameter;
-            $setting->tank_length = null;
-            $setting->tank_width  = null;
+                $stats['plant_max_temp'] = $plantData->max('suhu') ?? 0;
+                $stats['plant_min_temp'] = $plantData->min('suhu') ?? 0;
+                $stats['plant_max_ppm']  = $plantData->max('tds_ppm') ?? 0;
+            }
         }
-
-        $setting->save();
-
-        return back()->with('success', '✅ Pengaturan Tanaman & Tandon Berhasil Disimpan!');
+        return $stats;
     }
 }

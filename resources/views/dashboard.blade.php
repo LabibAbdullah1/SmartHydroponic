@@ -39,6 +39,15 @@
                         <p class="text-xs text-gray-500 font-medium">Powered by Labib.Dev</p>
                     </div>
                 </div>
+                <div class="flex items-center gap-3">
+                    <div class="hidden md:flex ml-10 space-x-4">
+                        <a href="{{ route('dashboard') }}"
+                            class="text-gray-900 font-bold px-3 py-2 rounded-md text-sm">Dashboard</a>
+                        <a href="{{ route('history.index') }}"
+                            class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm transition">Riwayat
+                            Tanam</a>
+                    </div>
+                </div>
                 <div class="flex items-center gap-4">
                     <div class="hidden md:flex flex-col items-end mr-2">
                         <span class="text-sm font-semibold text-gray-700">{{ now()->format('d M Y') }}</span>
@@ -333,6 +342,30 @@
                         Simpan & Mulai Tanam Baru
                     </button>
                 </div>
+            </form>
+        </div>
+
+        <div
+            class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl shadow-lg p-8 mb-8 text-white flex flex-col md:flex-row justify-between items-center gap-6 mt-4">
+            <div>
+                <h3 class="text-2xl font-bold mb-2">🌱 Selesai Masa Tanam?</h3>
+                <p class="text-blue-100 max-w-xl">
+                    Jika Anda melakukan panen atau mengganti tanaman, tekan tombol di samping.
+                    Sistem akan <span class="font-bold text-white">menganalisis data</span>, menghitung skor kualitas
+                    nutrisi, dan menyimpannya ke halaman Riwayat sebagai rapor.
+                </p>
+            </div>
+            <form action="{{ route('planting.finish') }}" method="POST"
+                onsubmit="return confirm('Apakah Anda yakin ingin mengakhiri sesi ini? Data statistik akan diarsipkan ke Riwayat.');">
+                @csrf
+                <button type="submit"
+                    class="bg-white text-blue-700 hover:bg-gray-100 px-8 py-4 rounded-xl font-bold shadow-md transition-all transform hover:scale-105 flex items-center gap-3">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Panen & Simpan Rapor
+                </button>
             </form>
         </div>
 
