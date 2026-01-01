@@ -106,7 +106,7 @@ Pastikan software berikut terinstal:
 
 1. **Clone Repositori**
     ```bash
-    git clone [https://github.com/LabibAbdullah1/SmartHydroponic.git](https://github.com/LabibAbdullah1/SmartHydroponic.git)
+    git clone https://github.com/LabibAbdullah1/SmartHydroponic.git
     cd SmartHydroponic
     ```
 
