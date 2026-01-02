@@ -132,7 +132,7 @@ Pastikan software berikut terinstal:
     ```bash
     php artisan key:generate
     php artisan migrate
-    php artisan DB:seed
+    php artisan db:seed
     ```
 
 5. **Jalankan Sistem**
