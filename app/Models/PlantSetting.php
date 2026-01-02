@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class PlantSetting extends Model
 {
+    use HasFactory;
     protected $table = 'plant_settings';
     protected $guarded = ['id']; // Izinkan semua kolom diupdate kecuali ID
 
