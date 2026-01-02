@@ -53,11 +53,6 @@
                         <span class="text-sm font-semibold text-gray-700">{{ now()->format('d M Y') }}</span>
                         <span class="text-xs text-gray-400" id="clock">00:00:00</span>
                     </div>
-                    <span id="sysStatusBadge"
-                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 transition-colors duration-300">
-                        <span id="sysStatusDot" class="w-2 h-2 bg-gray-500 rounded-full mr-2"></span>
-                        <span id="sysStatusText">Connecting...</span>
-                    </span>
                 </div>
             </div>
         </div>
@@ -85,6 +80,11 @@
                     Saran dosis dihitung berdasarkan volume air real-time & target PPM.
                 </p>
             </div>
+            <span id="sysStatusBadge"
+                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 transition-colors duration-300">
+                <span id="sysStatusDot" class="w-2 h-2 bg-gray-500 rounded-full mr-2"></span>
+                <span id="sysStatusText">Connecting...</span>
+            </span>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">

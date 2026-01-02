@@ -7,6 +7,8 @@ use App\Models\Telemetry;
 use App\Models\PlantSetting;
 use App\Models\PlantingHistory;
 
+
+
 class PlantingHistoryController extends Controller
 {
     public function index()
@@ -16,7 +18,7 @@ class PlantingHistoryController extends Controller
 
         return view('history', compact('histories'));
     }
-    
+
     public function finishSession(Request $request)
     {
         $setting = PlantSetting::first();
@@ -70,4 +72,5 @@ class PlantingHistoryController extends Controller
 
         return back()->with('success', "🎉 Panen Berhasil! Skor Kualitas Nutrisi: {$score}%");
     }
+
 }

@@ -14,3 +14,4 @@ Route::post('/settings/update', [PlantSettingController::class, 'update'])->name
 // Panen / Finish Session (Tombol Merah)
 Route::post('/planting/finish', [PlantingHistoryController::class, 'finishSession'])->name('planting.finish');
 Route::get('/history', [PlantingHistoryController::class, 'index'])->name('history.index');
+Route::delete('/history/{history}', [PlantingHistoryController::class, 'destroy'])->name('history.destroy');
