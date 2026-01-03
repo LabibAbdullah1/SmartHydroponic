@@ -161,16 +161,16 @@ Pastikan software berikut terinstal:
     Semua script ada di dalam folder `./scripts`.
 
     #### 🪟 Pengguna Windows
-    1.  **Tanpa Alat (Simulasi):** Klik 2x `scripts/win-start-testing.bat`.
-        * *Menjalankan: Server, MQTT Subscribe, & Dummy Python Sensor.*
-    2.  **Dengan Alat (ESP32):** Klik 2x `scripts/win-start-project.bat`.
-        * *Menjalankan: Server & MQTT Subscribe saja.*
+1.  **Tanpa Alat (Simulasi):** Klik 2x `scripts/win-start-testing.bat`.
+    * *Menjalankan: Server, MQTT Subscribe, & Dummy Python Sensor.*
+2.  **Dengan Alat (ESP32):** Klik 2x `scripts/win-start-project.bat`.
+    * *Menjalankan: Server & MQTT Subscribe saja.*
 
     #### 🍎 Pengguna MacOS
-    1.  **Tanpa Alat (Simulasi):** Klik 2x `scripts/mac-start-testing.command`.
-    2.  **Dengan Alat (ESP32):** Klik 2x `scripts/mac-start-project.command`.
+1.  **Tanpa Alat (Simulasi):** Klik 2x `scripts/mac-start-testing.command`.
+2.  **Dengan Alat (ESP32):** Klik 2x `scripts/mac-start-project.command`.
 
-    > **Catatan:** Pastikan Windows Terminal (Windows) sudah terinstall atau izin eksekusi (Mac) sudah diberikan.
+> **Catatan:** Pastikan Windows Terminal (Windows) sudah terinstall atau izin eksekusi (Mac) sudah diberikan.
 
 ## 🎈 Usage <a name="usage"></a>
 
