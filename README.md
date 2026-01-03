@@ -164,9 +164,9 @@ Pastikan software berikut terinstal:
    - Cara manual
         - terminal 1 menjalankan project Laravel
         ```bash
-        php artisan serve
+        artisan serve --host 0.0.0.0 --port 8000
         ```
-        >silahkan buka di browser http://localhost:8000
+        >silahkan buka di browser http://0.0.0.0:8000
 
         - terminal 2 mqtt subscribe
         ```bash
@@ -175,7 +175,8 @@ Pastikan software berikut terinstal:
         >jika berhasil, laravel sudah siap menerima data dari protokl mqtt port 1883
 
     Project ini memiliki shortcut untuk memudahkan setup environment.
-    Semua script ada di dalam folder `./scripts`.
+    Semua script ada di dalam folder `./scripts` ( untuk native supaya bisa di buka di hp dengan syarat terhubung dengan wifi yang sama dengan laptop/PC kamu ).
+    jika ingin menjalankan di localhost silahkan jalankan pada cara manual untuk project Laravel
 
     #### 🪟 Pengguna Windows
     - **Tanpa Alat (Simulasi):** Klik 2x `scripts/win-start-testing.bat`.
@@ -188,6 +189,9 @@ Pastikan software berikut terinstal:
     -  **Dengan Alat (ESP32):** Klik 2x `scripts/mac-start-project.command`.
 
 > *Catatan:* Pastikan Windows Terminal (Windows) sudah terinstall atau izin eksekusi (Mac) sudah diberikan.
+
+
+> jika shortcut berhasil silahkan akses mengguankan HP dengan ip Laptop/PC kalian dengan port:8000 contoh http://[IP-LAPTOP-KAMU]:8000
 
 
 ## 🎈 Usage <a name="usage"></a>
