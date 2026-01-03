@@ -135,18 +135,22 @@ Pastikan software berikut terinstal:
     php artisan db:seed
     ```
 
-5. **Jalankan Sistem**
-    Anda perlu membuka 2 terminal berbeda:
-    
-    *Terminal 1 (Web Server):*
-    ```bash
-    php artisan serve
-    ```
-    
-    *Terminal 2 (MQTT Worker - Otak KA):*
-    ```bash
-    php artisan mqtt:subscribe
-    ```
+5. **Cara Menjalankan Project**
+
+    Project ini memiliki shortcut untuk memudahkan setup environment.
+    Semua script ada di dalam folder `./scripts`.
+
+    #### 🪟 Pengguna Windows
+    1.  **Tanpa Alat (Simulasi):** Klik 2x `scripts/win-start-testing.bat`.
+        * *Menjalankan: Server, MQTT Subscribe, & Dummy Python Sensor.*
+    2.  **Dengan Alat (ESP32):** Klik 2x `scripts/win-start-project.bat`.
+        * *Menjalankan: Server & MQTT Subscribe saja.*
+
+    #### 🍎 Pengguna MacOS
+    1.  **Tanpa Alat (Simulasi):** Klik 2x `scripts/mac-start-testing.command`.
+    2.  **Dengan Alat (ESP32):** Klik 2x `scripts/mac-start-project.command`.
+
+    > **Catatan:** Pastikan Windows Terminal (Windows) sudah terinstall atau izin eksekusi (Mac) sudah diberikan.
 
 ## 🎈 Usage <a name="usage"></a>
 
