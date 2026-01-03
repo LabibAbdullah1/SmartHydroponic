@@ -40,8 +40,7 @@ Berikut adalah tampilan dashboard monitoring yang menampilkan data real-time dar
 
 <div align="center">
 
-### 🚀 [AKSES DEMO DASHBOARD](http://localhost:8000) 🚀
-*(Link demo publik jika ada)*
+### 🚀 APLIKASI INI DI BUAT UNTUK LOCAL SAJA 🚀 
 
 </div>
 
@@ -53,7 +52,7 @@ Berikut adalah tampilan dashboard monitoring yang menampilkan data real-time dar
   <img src="public/images/dashboard-3.png" alt="Dashboard 3" width="70%">
   <img src="public/images/dashboard-4.png" alt="Dashboard 4" width="70%">
   <br>
-  <i>Dashboard Monitoring Suhu, Nutrisi (PPM), dan Volume Air</i>
+  <i>Dashboard Monitoring Suhu, Nutrisi (PPM), configurasi tanaman dan ukuran wadah air</i>
 </div>
 
 <br>
@@ -117,7 +116,7 @@ Instruksi ini untuk menjalankan server Laravel dan Worker MQTT di komputer lokal
 ### Prerequisites
 
 Pastikan software berikut terinstal:
-- PHP >= 8.1
+- PHP >= 8.4
 - Composer
 - MySQL
 - **MQTT Broker** (Mosquitto / EMQX) - *Wajib jalan di port 1883*
@@ -155,7 +154,25 @@ Pastikan software berikut terinstal:
     php artisan db:seed
     ```
 
-5. **Cara Menjalankan Project**
+5. **Source Code ESP32**
+
+    silahkan copy code dengan format .ino di folder testing kedalam arduino IDE  
+    [source code](./testing/iot_esp32.ino)
+
+6. **Cara Menjalankan Project**
+
+   - Cara manual
+        - terminal 1 menjalankan project Laravel
+        ```bash
+        php artisan serve
+        ```
+        >silahkan buka di browser http://localhost:8000
+
+        - terminal 2 mqtt subscribe
+        ```bash
+        php artisan mqtt:subscribe
+        ```
+        >jika berhasil, laravel sudah siap menerima data dari protokl mqtt port 1883
 
     Project ini memiliki shortcut untuk memudahkan setup environment.
     Semua script ada di dalam folder `./scripts`.
@@ -171,6 +188,7 @@ Pastikan software berikut terinstal:
     -  **Dengan Alat (ESP32):** Klik 2x `scripts/mac-start-project.command`.
 
 > *Catatan:* Pastikan Windows Terminal (Windows) sudah terinstall atau izin eksekusi (Mac) sudah diberikan.
+
 
 ## 🎈 Usage <a name="usage"></a>
 
