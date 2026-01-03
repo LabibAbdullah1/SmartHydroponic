@@ -56,16 +56,20 @@ Berikut adalah tampilan dashboard monitoring yang menampilkan data real-time dar
   <i>Dashboard Monitoring Suhu, Nutrisi (PPM), dan Volume Air</i>
 </div>
 
+<br>
+
 <div align="center">
   <img src="public/images/riwayat-tanam.png" alt="riwayat tanam" width="100%">
   <br>
   <i>Riwayat Tanam dan hasil analisis</i>
 </div>
 
+<br>
+
 <div align="center">
-  <img src="public/images/mobile-view-dashboard.png" alt="mobile view dashboard" width="100%">
+  <img src="public/images/mobile-view-dashboard.png" alt="mobile view dashboard" width="50%">
   <br>
-  <img src="public/images/mobile-view-riwayat" alt="mobile view riwayat tanam" width="100%">
+  <img src="public/images/mobile-view-riwayat.png" alt="mobile view riwayat tanam" width="50%">
   <br>
   <i>Mobile view</i>
 </div>
