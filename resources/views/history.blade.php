@@ -34,29 +34,29 @@
                 </div>
 
                 {{-- NAVBAR DESKTOP --}}
-        <div class="hidden md:block bg-white border-b shadow-sm">
-            <div class="max-w-7xl mx-auto px-6 py-3 flex gap-4">
+                <div class="hidden md:block bg-white border-b shadow-sm">
+                    <div class="max-w-7xl mx-auto px-6 py-3 flex gap-4">
 
-                {{-- Dashboard --}}
-                <a href="{{ route('dashboard') }}"
-                    class="px-5 py-2 rounded-md text-sm font-semibold transition
+                        {{-- Dashboard --}}
+                        <a href="{{ route('dashboard') }}"
+                            class="px-5 py-2 rounded-md text-sm font-semibold transition
                     {{ request()->routeIs('dashboard')
-                    ? 'bg-green-600 text-white shadow'
-                    : 'bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700' }}">
-                    Dashboard
-                </a>
+                        ? 'bg-green-600 text-white shadow'
+                        : 'bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700' }}">
+                            Dashboard
+                        </a>
 
-                {{-- Riwayat Tanam --}}
-                <a href="{{ route('history.index') }}"
-                    class="px-5 py-2 rounded-md text-sm font-semibold transition
+                        {{-- Riwayat Tanam --}}
+                        <a href="{{ route('history.index') }}"
+                            class="px-5 py-2 rounded-md text-sm font-semibold transition
                     {{ request()->routeIs('history.*')
-                    ? 'bg-green-600 text-white shadow'
-                    : 'bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700' }}">
-                    Riwayat Tanam
-                </a>
+                        ? 'bg-green-600 text-white shadow'
+                        : 'bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700' }}">
+                            Riwayat Tanam
+                        </a>
 
-            </div>
-        </div>
+                    </div>
+                </div>
 
                 <div class="flex items-center gap-4">
                     <div class="hidden md:flex flex-col items-end mr-2">
@@ -149,7 +149,7 @@
                                     Suhu Ekstrim</th>
                                 <th scope="col"
                                     class="px-6 py-4 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                    Skor Nutrisi (KA)</th>
+                                    Skor Nutrisi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -176,7 +176,8 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <span
                                             class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                            {{ $history->started_at->diffInDays($history->finished_at) }} Hari
+                                            {{ number_format($history->started_at->diffInHours($history->finished_at) / 24, 1) }}
+                                            Hari
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600 font-mono">
