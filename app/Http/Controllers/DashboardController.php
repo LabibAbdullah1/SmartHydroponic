@@ -25,8 +25,11 @@ class DashboardController extends Controller
         // Safety Check
         if (!$setting) {
             return view('dashboard', [
-                'device' => null, 'labels' => [], 'values' => [],
-                'setting' => null, 'stats' => null
+                'device' => null,
+                'labels' => [],
+                'values' => [],
+                'setting' => null,
+                'stats' => null
             ]);
         }
 
@@ -55,15 +58,18 @@ class DashboardController extends Controller
 
         if (!$device) {
             return response()->json([
-                'labels' => [], 'ppm' => [], 'temp' => [],
-                'ka_message' => 'Menunggu koneksi...', 'ka_status' => 'WAITING',
+                'labels' => [],
+                'ppm' => [],
+                'temp' => [],
+                'ka_message' => 'Menunggu koneksi...',
+                'ka_status' => 'WAITING',
                 'is_online' => false
             ]);
         }
 
         $data = Telemetry::where('device_id', $device->id)
             ->orderBy('received_at', 'desc')
-            ->take(20)->get();
+            ->take(100)->get();
 
         $latest = $data->first();
         $sortedData = $data->sortBy('received_at');
@@ -85,8 +91,11 @@ class DashboardController extends Controller
     private function calculateStats($device, $setting)
     {
         $stats = [
-            'today_max_temp' => 0, 'today_min_temp' => 0,
-            'plant_max_temp' => 0, 'plant_min_temp' => 0, 'plant_max_ppm' => 0,
+            'today_max_temp' => 0,
+            'today_min_temp' => 0,
+            'plant_max_temp' => 0,
+            'plant_min_temp' => 0,
+            'plant_max_ppm' => 0,
             'plant_start_date' => $setting->started_at ? $setting->started_at->format('d M Y') : '-',
             'plant_ages' => $setting->started_at
                 ? (function () use ($setting) {

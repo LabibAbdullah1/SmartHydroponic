@@ -81,38 +81,44 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {{-- NAVBAR MOBILE --}}
-        <div class="md:hidden fixed py-4 bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg">
-            <div class="flex justify-around py-2">
+        <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg">
+            <div class="flex h-16">
 
                 {{-- Dashboard --}}
                 <a href="{{ route('dashboard') }}"
-                    class="flex flex-col items-center text-xs transition
-                    {{ request()->routeIs('dashboard') ? 'text-green-600 font-bold' : 'text-gray-500 hover:text-green-600' }}">
+                    class="flex-1 flex flex-col items-center justify-center text-xs transition
+            {{ request()->routeIs('dashboard') ? 'text-green-600 font-bold' : 'text-gray-500 hover:text-green-600' }}">
+
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24"
                         stroke-width="1.8" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.125 1.125 0 011.591 0L21.75 12M4.5 9.75V19.875
-                        c0 .621.504 1.125 1.125 1.125H9.75V15
-                        c0-.621.504-1.125 1.125-1.125h2.25
-                        c.621 0 1.125.504 1.125 1.125v6h4.125
-                        c.621 0 1.125-.504 1.125-1.125V9.75" />
+                    c0 .621.504 1.125 1.125 1.125H9.75V15
+                    c0-.621.504-1.125 1.125-1.125h2.25
+                    c.621 0 1.125.504 1.125 1.125v6h4.125
+                    c.621 0 1.125-.504 1.125-1.125V9.75" />
                     </svg>
+
+                    <span>Dashboard</span>
                 </a>
 
                 {{-- Riwayat Tanam --}}
                 <a href="{{ route('history.index') }}"
-                    class="flex flex-col items-center text-xs transition
-                    {{ request()->routeIs('history.*') ? 'text-green-600 font-bold' : 'text-gray-500 hover:text-green-600' }}">
+                    class="flex-1 flex flex-col items-center justify-center text-xs transition
+            {{ request()->routeIs('history.*') ? 'text-green-600 font-bold' : 'text-gray-500 hover:text-green-600' }}">
+
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
+
+                    <span>Riwayat</span>
                 </a>
 
             </div>
         </div>
 
-
+        {{-- Alert Kondisi Nutrisi --}}
         <div id="kaAlertBox"
             class="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm mb-8 flex items-start gap-4 transition-all duration-500">
             <div class="flex-shrink-0 p-3 bg-gray-50 rounded-xl" id="kaIconBox">
@@ -162,7 +168,7 @@
                         <h3 class="text-md font-bold text-gray-800">Suhu Udara (Ambient)</h3>
                         <p class="text-xs text-gray-500">Suhu lingkungan sekitar tandon (°C)</p>
                     </div>
-                    <span class="p-2 bg-orange-50 rounded-lg text-orange-600">
+                    <span class="p-2 bg-orange-50 rounded-lg text-sky-600">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z">
@@ -521,12 +527,12 @@
                 datasets: [{
                     label: 'Suhu',
                     data: [],
-                    borderColor: '#f97316', // Orange 500
+                    borderColor: '#3b82f6', // Blue 500
                     backgroundColor: (context) => {
                         const ctx = context.chart.ctx;
                         const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-                        gradient.addColorStop(0, 'rgba(249, 115, 22, 0.2)');
-                        gradient.addColorStop(1, 'rgba(249, 115, 22, 0)');
+                        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.2)');
+                        gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
                         return gradient;
                     },
                     fill: true,
@@ -651,7 +657,15 @@
                 cancelButtonColor: '#6b7280', // gray-500
                 confirmButtonText: 'Ya, Panen & Simpan',
                 cancelButtonText: 'Batal',
-                reverseButtons: true
+                reverseButtons: true,
+                customClass: {
+                    popup: 'rounded-2xl p-6',
+                    title: 'text-sm md:text-lg font-bold text-gray-800',
+                    htmlContainer: 'text-xs md:text-md text-gray-600 leading-relaxed mt-2',
+                    confirmButton: 'bg-blue-600 hover:bg-blue-700 ml-2 text-white text-sm px-5 py-2 rounded-xl',
+                    cancelButton: 'bg-gray-200 hover:bg-gray-300 mr-2 text-gray-700 text-sm px-5 py-2 rounded-xl ml-2'
+                },
+                buttonsStyling: false // WAJIB agar Tailwind aktif
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('finishForm').submit();

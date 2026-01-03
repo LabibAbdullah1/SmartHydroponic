@@ -76,35 +76,43 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {{-- NAVBAR MOBILE --}}
-        <div class="md:hidden fixed py-4 bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg">
-            <div class="flex justify-around py-2">
+        <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg">
+            <div class="flex h-16">
+
                 {{-- Dashboard --}}
                 <a href="{{ route('dashboard') }}"
-                    class="flex flex-col items-center text-xs transition
+                    class="flex-1 flex flex-col items-center justify-center text-xs transition
             {{ request()->routeIs('dashboard') ? 'text-green-600 font-bold' : 'text-gray-500 hover:text-green-600' }}">
+
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24"
                         stroke-width="1.8" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.125 1.125 0 011.591 0L21.75 12M4.5 9.75V19.875
-            c0 .621.504 1.125 1.125 1.125H9.75V15
-            c0-.621.504-1.125 1.125-1.125h2.25
-            c.621 0 1.125.504 1.125 1.125v6h4.125
-            c.621 0 1.125-.504 1.125-1.125V9.75" />
+                    c0 .621.504 1.125 1.125 1.125H9.75V15
+                    c0-.621.504-1.125 1.125-1.125h2.25
+                    c.621 0 1.125.504 1.125 1.125v6h4.125
+                    c.621 0 1.125-.504 1.125-1.125V9.75" />
                     </svg>
+
+                    <span>Dashboard</span>
                 </a>
 
                 {{-- Riwayat Tanam --}}
                 <a href="{{ route('history.index') }}"
-                    class="flex flex-col items-center text-xs transition
-            {{ request()->routeIs('history.*') ? 'text-green-600 font-bold ' : 'text-gray-500 hover:text-green-600' }}">
+                    class="flex-1 flex flex-col items-center justify-center text-xs transition
+            {{ request()->routeIs('history.*') ? 'text-green-600 font-bold' : 'text-gray-500 hover:text-green-600' }}">
+
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
+
+                    <span>Riwayat</span>
                 </a>
 
             </div>
         </div>
+
 
         <div id="kaAlertBox"
             class="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm mb-8 flex items-start gap-4 transition-all duration-500">

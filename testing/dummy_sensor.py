@@ -21,6 +21,8 @@ except Exception as e:
 # Variabel awal
 current_dist = 10.0 
 current_tds = 800.0 
+current_temp = 28.0
+target_temp = 28.0
 
 try:
     while True:
@@ -29,13 +31,14 @@ try:
         if current_dist > 30: current_dist = 5.0 
 
         current_tds += random.uniform(-10, 10)
-        temp = round(random.uniform(28.0, 31.0), 1)
+        current_temp += (target_temp - current_temp) * 0.05
+        current_temp += random.uniform(-0.1, 0.1)
 
         # Packing JSON
         payload = {
             "dist": round(current_dist, 2),
             "tds": round(current_tds, 2),
-            "temp": temp
+            "temp": round(current_temp, 1)
         }
         
         json_payload = json.dumps(payload)
