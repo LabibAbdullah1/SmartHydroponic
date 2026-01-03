@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/smartHydroponic.png" alt="Logo Smart Hydroponic" width="200">
+  <img src="public/images/smartHydroponic.png" alt="Logo Smart Hydroponic" width="200">
 </div>
 
 <h3 align="center">Smart Hydroponic: IoT & Expert System Monitoring</h3>
@@ -48,9 +48,26 @@ Berikut adalah tampilan dashboard monitoring yang menampilkan data real-time dar
 <br>
 
 <div align="center">
-  <img src="public/Hydroponic.png" alt="Dashboard Utama" width="100%">
+  <img src="public/images/dashboard-1.png" alt="Dashboard 1" width="100%">
+  <img src="public/images/dashboard-2.png" alt="Dashboard 2" width="100%">
+  <img src="public/images/dashboard-3.png" alt="Dashboard 3" width="100%">
+  <img src="public/images/dashboard-4.png" alt="Dashboard 4" width="100%">
   <br>
   <i>Dashboard Monitoring Suhu, Nutrisi (PPM), dan Volume Air</i>
+</div>
+
+<div align="center">
+  <img src="public/images/riwayat-tanam.png" alt="riwayat tanam" width="100%">
+  <br>
+  <i>Riwayat Tanam dan hasil analisis</i>
+</div>
+
+<div align="center">
+  <img src="public/images/mobile-view-dashboard.png" alt="mobile view dashboard" width="100%">
+  <br>
+  <img src="public/images/mobile-view-riwayat" alt="mobile view riwayat tanam" width="100%">
+  <br>
+  <i>Mobile view</i>
 </div>
 
 ---
