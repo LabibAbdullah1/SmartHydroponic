@@ -66,10 +66,18 @@ Berikut adalah tampilan dashboard monitoring yang menampilkan data real-time dar
 <br>
 
 <div align="center">
-  <img src="public/images/mobile-view-dashboard.png" alt="mobile view dashboard" width="30%">
-  <img src="public/images/mobile-view-riwayat.png" alt="mobile view riwayat tanam" width="30%">
+  <img src="public/images/mobile-view-dashboard.png" 
+       alt="mobile view dashboard" 
+       width="45%" 
+       style="border-radius: 15px; margin-right: 5px;">
+  
+  <img src="public/images/mobile-view-riwayat.png" 
+       alt="mobile view riwayat tanam" 
+       width="45%" 
+       style="border-radius: 15px; margin-left: 5px;">
   <br>
-  <i>Mobile view</i>
+  <br>
+  <i>Tampilan Antarmuka Mobile (Dashboard & Riwayat Tanam)</i>
 </div>
 
 ---
