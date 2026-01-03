@@ -48,10 +48,10 @@ Berikut adalah tampilan dashboard monitoring yang menampilkan data real-time dar
 <br>
 
 <div align="center">
-  <img src="public/images/dashboard-1.png" alt="Dashboard 1" width="80%">
-  <img src="public/images/dashboard-2.png" alt="Dashboard 2" width="80%">
-  <img src="public/images/dashboard-3.png" alt="Dashboard 3" width="80%">
-  <img src="public/images/dashboard-4.png" alt="Dashboard 4" width="80%">
+  <img src="public/images/dashboard-1.png" alt="Dashboard 1" width="70%">
+  <img src="public/images/dashboard-2.png" alt="Dashboard 2" width="70%">
+  <img src="public/images/dashboard-3.png" alt="Dashboard 3" width="70%">
+  <img src="public/images/dashboard-4.png" alt="Dashboard 4" width="70%">
   <br>
   <i>Dashboard Monitoring Suhu, Nutrisi (PPM), dan Volume Air</i>
 </div>
@@ -59,7 +59,7 @@ Berikut adalah tampilan dashboard monitoring yang menampilkan data real-time dar
 <br>
 
 <div align="center">
-  <img src="public/images/riwayat-tanam.png" alt="riwayat tanam" width="80%">
+  <img src="public/images/riwayat-tanam.png" alt="riwayat tanam" width="70%">
   <br>
   <i>Riwayat Tanam dan hasil analisis</i>
 </div>
@@ -67,8 +67,8 @@ Berikut adalah tampilan dashboard monitoring yang menampilkan data real-time dar
 <br>
 
 <div align="center">
-  <img src="public/images/mobile-view-dashboard.png" alt="mobile view dashboard" width="45%">
-  <img src="public/images/mobile-view-riwayat.png" alt="mobile view riwayat tanam" width="45%">
+  <img src="public/images/mobile-view-dashboard.png" alt="mobile view dashboard" width="30%">
+  <img src="public/images/mobile-view-riwayat.png" alt="mobile view riwayat tanam" width="30%">
   <br>
   <i>Mobile view</i>
 </div>
