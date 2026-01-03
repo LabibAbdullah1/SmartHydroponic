@@ -35,17 +35,32 @@
                         <img src="{{ asset('icon-iot.png') }}" alt="">
                     </div>
                     <div>
-                        <h1 class="text-lg font-bold text-gray-900 leading-tight">Smart Hidroponik</h1>
+                        <h1 class="text-md lg:text-lg font-bold text-gray-900 leading-tight">Smart Hidroponik</h1>
                         <p class="text-xs text-gray-500 font-medium">Powered by Labib.Dev</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="hidden md:flex ml-10 space-x-4">
+                {{--  DESKTOP --}}
+                <div class="hidden md:block bg-white border-b shadow-sm">
+                    <div class="max-w-7xl mx-auto px-6 py-3 flex gap-4">
+
+                        {{-- Dashboard --}}
                         <a href="{{ route('dashboard') }}"
-                            class="text-gray-900 font-bold px-3 py-2 rounded-md text-sm">Dashboard</a>
+                            class="px-5 py-2 rounded-md text-sm font-semibold transition
+                    {{ request()->routeIs('dashboard')
+                        ? 'bg-green-600 text-white shadow'
+                        : 'bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700' }}">
+                            Dashboard
+                        </a>
+
+                        {{-- Riwayat Tanam --}}
                         <a href="{{ route('history.index') }}"
-                            class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm transition">Riwayat
-                            Tanam</a>
+                            class="px-5 py-2 rounded-md text-sm font-semibold transition
+                    {{ request()->routeIs('history.*')
+                        ? 'bg-green-600 text-white shadow'
+                        : 'bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700' }}">
+                            Riwayat Tanam
+                        </a>
+
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
@@ -53,12 +68,52 @@
                         <span class="text-sm font-semibold text-gray-700">{{ now()->format('d M Y') }}</span>
                         <span class="text-xs text-gray-400" id="clock">00:00:00</span>
                     </div>
+                    <span id="sysStatusBadge"
+                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 transition-colors duration-300">
+                        <span id="sysStatusDot" class="w-2 h-2 bg-gray-500 rounded-full mr-2"></span>
+                        <span id="sysStatusText">Connecting...</span>
+                    </span>
                 </div>
             </div>
         </div>
     </nav>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        {{-- NAVBAR MOBILE --}}
+        <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg">
+            <div class="flex justify-around py-2">
+
+                {{-- Dashboard --}}
+                <a href="{{ route('dashboard') }}"
+                    class="flex flex-col items-center text-xs transition
+                    {{ request()->routeIs('dashboard') ? 'text-green-600 font-bold' : 'text-gray-500 hover:text-green-600' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.125 1.125 0 011.591 0L21.75 12M4.5 9.75V19.875
+                        c0 .621.504 1.125 1.125 1.125H9.75V15
+                        c0-.621.504-1.125 1.125-1.125h2.25
+                        c.621 0 1.125.504 1.125 1.125v6h4.125
+                        c.621 0 1.125-.504 1.125-1.125V9.75" />
+                    </svg>
+                    Dashboard
+                </a>
+
+                {{-- Riwayat Tanam --}}
+                <a href="{{ route('history.index') }}"
+                    class="flex flex-col items-center text-xs transition
+                    {{ request()->routeIs('history.*') ? 'text-green-600 font-bold' : 'text-gray-500 hover:text-green-600' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Riwayat
+                </a>
+
+            </div>
+        </div>
+
 
         <div id="kaAlertBox"
             class="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm mb-8 flex items-start gap-4 transition-all duration-500">
@@ -80,11 +135,6 @@
                     Saran dosis dihitung berdasarkan volume air real-time & target PPM.
                 </p>
             </div>
-            <span id="sysStatusBadge"
-                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 transition-colors duration-300">
-                <span id="sysStatusDot" class="w-2 h-2 bg-gray-500 rounded-full mr-2"></span>
-                <span id="sysStatusText">Connecting...</span>
-            </span>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
