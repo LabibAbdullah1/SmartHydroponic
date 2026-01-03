@@ -34,7 +34,7 @@
                 </div>
 
                 {{-- NAVBAR DESKTOP --}}
-                <div class="hidden md:block bg-white border-b shadow-sm">
+                <div class="hidden md:block bg-white">
                     <div class="max-w-7xl mx-auto px-6 py-3 flex gap-4">
 
                         {{-- Dashboard --}}
@@ -59,6 +59,11 @@
                 </div>
 
                 <div class="flex items-center gap-4">
+                    <span
+                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/0 text-gray-800 transition-colors duration-300">
+                        <span class="w-2 h-2 rounded-full mr-2"></span>
+                        <span class="text-white">Connecting...</span>
+                    </span>
                     <div class="hidden md:flex flex-col items-end mr-2">
                         <span class="text-sm font-semibold text-gray-700">{{ now()->format('d M Y') }}</span>
                         <span class="text-xs text-gray-400" id="clock">00:00:00</span>
@@ -71,9 +76,8 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {{-- NAVBAR MOBILE --}}
-        <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg">
+        <div class="md:hidden fixed py-4 bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg">
             <div class="flex justify-around py-2">
-
                 {{-- Dashboard --}}
                 <a href="{{ route('dashboard') }}"
                     class="flex flex-col items-center text-xs transition
@@ -86,29 +90,36 @@
             c.621 0 1.125.504 1.125 1.125v6h4.125
             c.621 0 1.125-.504 1.125-1.125V9.75" />
                     </svg>
-                    Dashboard
                 </a>
 
                 {{-- Riwayat Tanam --}}
                 <a href="{{ route('history.index') }}"
                     class="flex flex-col items-center text-xs transition
-            {{ request()->routeIs('history.*') ? 'text-green-600 font-bold' : 'text-gray-500 hover:text-green-600' }}">
+            {{ request()->routeIs('history.*') ? 'text-green-600 font-bold ' : 'text-gray-500 hover:text-green-600' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    Riwayat
                 </a>
 
             </div>
         </div>
 
-        <div class="mb-8 px-2">
-            <h2 class="text-lg md:text-2xl font-bold text-gray-800">📚 Arsip Laporan Panen</h2>
-            <p class="text-xs text-gray-500">Rekapitulasi performa sistem dan kualitas nutrisi (KA) dari masa tanam
-                sebelumnya.
-            </p>
+        <div id="kaAlertBox"
+            class="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm mb-8 flex items-start gap-4 transition-all duration-500">
+            <div class="flex-shrink-0 p-3 bg-gray-50 rounded-xl" id="kaIconBox">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-6 mb-1" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <div class="flex-1">
+                <h3 class="text-md font-bold text-green-800 mb-1">Riwayat Tanam</h3>
+                <p class="text-sm text-green-600 font-medium leading-relaxed">Rekapitulasi analisis selama priode tanam
+                </p>
+            </div>
         </div>
 
         @if ($histories->isEmpty())
@@ -162,7 +173,8 @@
                                                 🌱
                                             </div>
                                             <div class="ml-4">
-                                                <div class="text-sm font-bold text-gray-900">{{ $history->plant_name }}
+                                                <div class="text-sm font-bold text-gray-900">
+                                                    {{ $history->plant_name }}
                                                 </div>
                                                 <div class="text-xs text-gray-500">
                                                     {{ $history->finished_at->format('d M Y, H:i') }} (Panen)</div>
@@ -174,13 +186,22 @@
                                             {{ $history->finished_at->format('d M Y') }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        @php
+                                            $totalMinutes = $history->started_at->diffInMinutes($history->finished_at);
+
+                                            $days = intdiv($totalMinutes, 1440); // 24 * 60
+                                            $hours = intdiv($totalMinutes % 1440, 60);
+                                            $minutes = $totalMinutes % 60;
+                                        @endphp
+
                                         <span
-                                            class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                            {{ number_format($history->started_at->diffInHours($history->finished_at) / 24, 1) }}
-                                            Hari
+                                            class="px-2 py-1 inline-flex text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            {{ $days }} Hari {{ $hours }} Jam {{ $minutes }}
+                                            Menit
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600 font-mono">
+                                    <td
+                                        class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600 font-mono">
                                         {{ $history->avg_ppm }} PPM
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
@@ -209,6 +230,10 @@
                 </div>
             </div>
         @endif
+
+        <footer class="mt-12 text-center text-sm text-gray-400 pb-12 md:pb-2">
+            &copy; {{ date('Y') }} Smart Hidroponik System. Developed with Laravel & IoT Tech.
+        </footer>
 
     </main>
 

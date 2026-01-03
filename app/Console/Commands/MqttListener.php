@@ -92,7 +92,7 @@ class MqttListener extends Command
                             $saranDosis = ($gap / $kekuatanNutrisi) * $volumeLiter;
                             $saranDosis = round($saranDosis, 1);
 
-                            $pesanSaran = "⚠️ KURANG NUTRISI! Tambahkan {$saranDosis}ml Nutrisi A & B";
+                            $pesanSaran = "KURANG NUTRISI! Tambahkan {$saranDosis} ml Nutrisi A & B";
                             $status = "WARNING";
 
                             // KASUS B: KELEBIHAN NUTRISI (Tambah Air Baku)
@@ -105,16 +105,16 @@ class MqttListener extends Command
                             $literAirBaku = ($volumeLiter * ($ppmAktual - $setting->target_ppm)) / $setting->target_ppm;
                             $literAirBaku = round($literAirBaku, 1); // Bulatkan 1 angka belakang koma
 
-                            $pesanSaran = "⚠️ TERLALU PEKAT! Tambahkan ±{$literAirBaku} Liter Air Baku";
+                            $pesanSaran = "TERLALU PEKAT! Tambahkan ±{$literAirBaku} Liter Air Baku";
                             $status = "OVER";
 
                             // KASUS C: OPTIMAL
                         } else {
-                            $pesanSaran = "✅ Kondisi Nutrisi Optimal";
+                            $pesanSaran = "Kondisi Nutrisi Optimal";
                             $status = "OPTIMAL";
                         }
                     } else {
-                        $pesanSaran = "⚠️ AIR HABIS / SENSOR ERROR (Jarak: $jarakSensor cm)";
+                        $pesanSaran = "AIR HABIS / SENSOR ERROR (Jarak: $jarakSensor cm)";
                         $status = "ERROR";
                     }
 

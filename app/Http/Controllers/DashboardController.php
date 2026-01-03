@@ -88,7 +88,17 @@ class DashboardController extends Controller
             'today_max_temp' => 0, 'today_min_temp' => 0,
             'plant_max_temp' => 0, 'plant_min_temp' => 0, 'plant_max_ppm' => 0,
             'plant_start_date' => $setting->started_at ? $setting->started_at->format('d M Y') : '-',
-            'plant_age_days'   => $setting->started_at ? (int)$setting->started_at->diffInDays(now()) : 0,
+            'plant_ages' => $setting->started_at
+                ? (function () use ($setting) {
+                    $totalMinutes = $setting->started_at->diffInMinutes(now());
+
+                    $days = intdiv($totalMinutes, 1440);
+                    $hours = intdiv($totalMinutes % 1440, 60);
+                    $minutes = $totalMinutes % 60;
+
+                    return "{$days} Hari {$hours} Jam {$minutes} Menit";
+                })()
+                : '0 Hari 0 Jam 0 Menit',
         ];
 
         if ($device) {

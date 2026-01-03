@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 {{--  DESKTOP --}}
-                <div class="hidden md:block bg-white border-b shadow-sm">
+                <div class="hidden md:block bg-white">
                     <div class="max-w-7xl mx-auto px-6 py-3 flex gap-4">
 
                         {{-- Dashboard --}}
@@ -64,15 +64,15 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <div class="hidden md:flex flex-col items-end mr-2">
-                        <span class="text-sm font-semibold text-gray-700">{{ now()->format('d M Y') }}</span>
-                        <span class="text-xs text-gray-400" id="clock">00:00:00</span>
-                    </div>
                     <span id="sysStatusBadge"
                         class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 transition-colors duration-300">
                         <span id="sysStatusDot" class="w-2 h-2 bg-gray-500 rounded-full mr-2"></span>
                         <span id="sysStatusText">Connecting...</span>
                     </span>
+                    <div class="hidden md:flex flex-col items-end mr-2">
+                        <span class="text-sm font-semibold text-gray-700">{{ now()->format('d M Y') }}</span>
+                        <span class="text-xs text-gray-400" id="clock">00:00:00</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,7 +81,7 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {{-- NAVBAR MOBILE --}}
-        <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg">
+        <div class="md:hidden fixed py-4 bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg">
             <div class="flex justify-around py-2">
 
                 {{-- Dashboard --}}
@@ -96,7 +96,6 @@
                         c.621 0 1.125.504 1.125 1.125v6h4.125
                         c.621 0 1.125-.504 1.125-1.125V9.75" />
                     </svg>
-                    Dashboard
                 </a>
 
                 {{-- Riwayat Tanam --}}
@@ -108,7 +107,6 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    Riwayat
                 </a>
 
             </div>
@@ -118,15 +116,16 @@
         <div id="kaAlertBox"
             class="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm mb-8 flex items-start gap-4 transition-all duration-500">
             <div class="flex-shrink-0 p-3 bg-gray-50 rounded-xl" id="kaIconBox">
-                <svg id="kaIcon" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24"
+                <svg id="kaIcon" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
             </div>
             <div class="flex-1">
-                <h3 class="text-lg font-bold text-gray-800 mb-1" id="kaTitle">Analisis Sistem Cerdas</h3>
-                <p class="text-gray-600 font-medium leading-relaxed" id="kaMessage">Menghubungkan ke server KA...</p>
+                <h3 class="text-md font-bold text-gray-800 mb-1" id="kaTitle">Analisis Sistem Cerdas</h3>
+                <p class="text-sm text-gray-600 font-medium leading-relaxed" id="kaMessage">Menghubungkan ke server
+                    KA...</p>
                 <p class="text-xs text-gray-400 mt-2 flex items-center gap-1">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -141,8 +140,8 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                 <div class="flex justify-between items-center mb-6">
                     <div>
-                        <h3 class="text-lg font-bold text-gray-800">Kadar Nutrisi</h3>
-                        <p class="text-sm text-gray-500">Satuan Part Per Million (PPM)</p>
+                        <h3 class="text-md font-bold text-gray-800">Kadar Nutrisi</h3>
+                        <p class="text-xs text-gray-500">Satuan Part Per Million (PPM)</p>
                     </div>
                     <span class="p-2 bg-green-50 rounded-lg text-green-600">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -160,8 +159,8 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                 <div class="flex justify-between items-center mb-6">
                     <div>
-                        <h3 class="text-lg font-bold text-gray-800">Suhu Udara (Ambient)</h3>
-                        <p class="text-sm text-gray-500">Suhu lingkungan sekitar tandon (°C)</p>
+                        <h3 class="text-md font-bold text-gray-800">Suhu Udara (Ambient)</h3>
+                        <p class="text-xs text-gray-500">Suhu lingkungan sekitar tandon (°C)</p>
                     </div>
                     <span class="p-2 bg-orange-50 rounded-lg text-orange-600">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -191,8 +190,8 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Suhu Hari Ini</p>
-                            <h4 class="text-2xl font-bold text-gray-800 mt-1">
-                                {{ $stats['today_max_temp'] }}° <span class="text-sm text-gray-400 font-normal">/
+                            <h4 class="text-md font-bold text-red-600 mt-1">
+                                {{ $stats['today_max_temp'] }}° <span class="text-sm text-blue-400 font-normal">/
                                     {{ $stats['today_min_temp'] }}°</span>
                             </h4>
                         </div>
@@ -215,10 +214,9 @@
                         <div>
                             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Usia Tanaman</p>
                             <div class="flex items-baseline mt-1">
-                                <h4 class="text-3xl font-bold text-gray-800 text-green-600">
-                                    {{ $stats['plant_age_days'] }}
+                                <h4 class="text-md font-bold text-gray-800 text-green-600">
+                                    {{ $stats['plant_ages'] }}
                                 </h4>
-                                <span class="ml-1 text-sm text-gray-500 font-medium">Hari</span>
                             </div>
                         </div>
                         <div class="bg-green-50 p-3 rounded-xl text-green-500">
@@ -239,7 +237,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Rekor Panas</p>
-                            <h4 class="text-2xl font-bold text-gray-800 mt-1">{{ $stats['plant_max_temp'] }}°C</h4>
+                            <h4 class="text-md font-bold text-red-600 mt-1">{{ $stats['plant_max_temp'] }}°C</h4>
                         </div>
                         <div class="bg-orange-50 p-3 rounded-xl text-orange-500">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -259,7 +257,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Top Nutrisi</p>
-                            <h4 class="text-3xl font-bold text-gray-800 mt-1 text-purple-600">
+                            <h4 class="text-md font-bold text-gray-800 mt-1 text-purple-600">
                                 {{ (int) $stats['plant_max_ppm'] }}
                             </h4>
                         </div>
@@ -305,10 +303,12 @@
                     <div class="space-y-6">
                         <div class="flex items-center gap-2 mb-4 border-b pb-2">
                             <span class="bg-green-100 text-green-600 p-1.5 rounded-lg">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064">
-                                    </path>
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22V10
+                                        M7 6c3 0 5 2 5 6
+                                        -3 0-5-2-5-6
+                                        m10 3c-3 0-5 2-5 6
+                                        3 0 5-2 5-6" />
                                 </svg>
                             </span>
                             <h4 class="font-semibold text-gray-700">Target Tanaman</h4>
@@ -381,15 +381,17 @@
                     </div>
                 </div>
 
-                <div class="mt-8 flex justify-end">
+                <div class="mt-8 flex justify-center  md:justify-end">
                     <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 font-semibold flex items-center gap-2">
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 font-semibold flex items-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4">
                             </path>
                         </svg>
-                        Simpan & Mulai Tanam Baru
+                        <span class="text-sm">
+                            Simpan & Mulai Tanam Baru
+                        </span>
                     </button>
                 </div>
             </form>
@@ -398,33 +400,34 @@
         <div
             class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl shadow-lg p-8 mb-8 text-white flex flex-col md:flex-row justify-between items-center gap-6 mt-4">
             <div>
-                <h3 class="text-2xl font-bold mb-2">🌱 Selesai Masa Tanam?</h3>
-                <p class="text-blue-100 max-w-xl">
-                    Jika Anda melakukan panen atau mengganti tanaman, tekan tombol di samping.
-                    Sistem akan <span class="font-bold text-white">menganalisis data</span>, menghitung skor kualitas
+                <h3 class="text-xl font-bold mb-2">🌱 Selesai Masa Tanam?</h3>
+                <p class="text-blue-100 max-w-xl text-sm">
+                    Jika Anda melakukan panen atau mengganti tanaman, tekan tombol panen & simpan rapor. Sistem akan
+                    <span class="font-bold text-white">menganalisis data</span>, menghitung skor kualitas
                     nutrisi, dan menyimpannya ke halaman Riwayat sebagai rapor.
                 </p>
             </div>
-            <form action="{{ route('planting.finish') }}" method="POST"
-                onsubmit="return confirm('Apakah Anda yakin ingin mengakhiri sesi ini? Data statistik akan diarsipkan ke Riwayat.');">
+            <form id="finishForm" action="{{ route('planting.finish') }}" method="POST">
                 @csrf
-                <button type="submit"
+                <button type="button" id="finishBtn"
                     class="bg-white text-blue-700 hover:bg-gray-100 px-8 py-4 rounded-xl font-bold shadow-md transition-all transform hover:scale-105 flex items-center gap-3">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    Panen & Simpan Rapor
+                    <span class="text-sm">
+                        Panen & Simpan Rapor
+                    </span>
                 </button>
             </form>
         </div>
 
-        <footer class="mt-12 text-center text-sm text-gray-400 pb-8">
+        <footer class="mt-12 text-center text-sm text-gray-400 pb-12 md:pb-4">
             &copy; {{ date('Y') }} Smart Hidroponik System. Developed with Laravel & IoT Tech.
         </footer>
 
     </main>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Jam Digital Simple
         setInterval(() => {
@@ -567,29 +570,29 @@
                         // KUNING/ORANGE
                         box.classList.add('bg-yellow-50', 'border-yellow-200');
                         iconBox.classList.add('bg-yellow-100', 'text-yellow-600');
-                        title.innerText = "⚠️ Tindakan Diperlukan";
-                        title.className = "text-lg font-bold text-yellow-800 mb-1";
-                        msg.className = "text-yellow-700 font-medium leading-relaxed";
+                        title.innerText = "Tindakan Diperlukan";
+                        title.className = "text-md font-bold text-yellow-600 mb-1";
+                        msg.className = "text-sm text-yellow-600 font-medium leading-relaxed";
                         icon.innerHTML =
                             '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />';
 
                     } else if (data.ka_status === 'OVER') {
                         // MERAH
-                        box.classList.add('bg-red-50', 'border-red-200');
-                        iconBox.classList.add('bg-red-100', 'text-red-600');
-                        title.innerText = "⛔ Nutrisi Berlebih";
-                        title.className = "text-lg font-bold text-red-800 mb-1";
-                        msg.className = "text-red-700 font-medium leading-relaxed";
+                        box.classList.add('bg-red-50', 'border-red-600');
+                        iconBox.classList.add('bg-red-200', 'text-red-600');
+                        title.innerText = "Nutrisi Berlebih";
+                        title.className = "text-md font-bold text-red-800 mb-1";
+                        msg.className = "text-sm text-red-700 font-medium leading-relaxed";
                         icon.innerHTML =
                             '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />';
 
                     } else {
                         // HIJAU (AMAN)
-                        box.classList.add('bg-white', 'border-green-200'); // White card with green border
-                        iconBox.classList.add('bg-green-100', 'text-green-600');
-                        title.innerText = "✅ Kondisi Optimal";
-                        title.className = "text-lg font-bold text-green-800 mb-1";
-                        msg.className = "text-gray-600 font-medium leading-relaxed";
+                        box.classList.add('bg-white', 'border-green-600'); // White card with green border
+                        iconBox.classList.add('bg-green-200', 'text-green-600');
+                        title.innerText = "Kondisi Optimal";
+                        title.className = "text-md font-bold text-green-600 mb-1";
+                        msg.className = "text-sm text-green-600 font-medium leading-relaxed";
                         icon.innerHTML =
                             '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />';
                     }
@@ -636,6 +639,25 @@
         // Jalankan Update
         updateCharts();
         setInterval(updateCharts, 2000);
+
+        // sweetAlert
+        document.getElementById('finishBtn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Akhiri Sesi Tanam?',
+                text: 'Data statistik akan diarsipkan ke Riwayat dan tidak dapat diubah.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#2563eb', // blue-600
+                cancelButtonColor: '#6b7280', // gray-500
+                confirmButtonText: 'Ya, Panen & Simpan',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('finishForm').submit();
+                }
+            });
+        });
     </script>
 </body>
 
