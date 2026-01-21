@@ -7,8 +7,6 @@ use App\Models\Telemetry;
 use App\Models\PlantSetting;
 use App\Models\PlantingHistory;
 
-
-
 class PlantingHistoryController extends Controller
 {
     public function index()

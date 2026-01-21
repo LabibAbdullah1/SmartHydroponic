@@ -334,7 +334,8 @@
                         </div>
                     </div>
 
-                    <div x-data="{ shape: '{{ $setting->tank_shape ?? 'kotak' }}' }" class="space-y-6">
+                    <div x-data="{ shape: '{{ old('tank_shape', $setting->tank_shape ?? 'kotak') }}' }" class="space-y-6">
+
                         <div class="flex items-center gap-2 mb-4 border-b pb-2">
                             <span class="bg-blue-100 text-blue-600 p-1.5 rounded-lg">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -347,58 +348,68 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Tinggi Total Wadah (cm)</label>
-                            <input type="number" step="0.1" name="tank_height_cm"
-                                value="{{ $setting->tank_height_cm ?? 30 }}"
-                                class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 transition">
-                        </div>
-
-                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Bentuk Wadah</label>
                             <select name="tank_shape" x-model="shape"
                                 class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 bg-white">
+
                                 <option value="kotak">Kotak / Persegi Panjang</option>
-                                <option value="tabung">Tabung / Silinder</option>
+                                <option value="tabung_tegak">Tabung Tegak (Silinder Berdiri)</option>
+                                <option value="tabung_tidur">Tabung Tidur (Silinder Horizontal)</option>
                             </select>
                         </div>
 
-                        <div x-show="shape === 'kotak'" class="grid grid-cols-2 gap-4 animate-fade-in-down">
-                            <div>
-                                <label class="block text-xs text-gray-500 mb-1">Panjang (cm)</label>
-                                <input type="number" step="0.1" name="tank_length"
-                                    value="{{ $setting->tank_length ?? 50 }}"
-                                    class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5">
-                            </div>
-                            <div>
-                                <label class="block text-xs text-gray-500 mb-1">Lebar (cm)</label>
-                                <input type="number" step="0.1" name="tank_width"
-                                    value="{{ $setting->tank_width ?? 30 }}"
-                                    class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5">
-                            </div>
+                        <div x-show="shape !== 'tabung_tidur'" class="animate-fade-in-down">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tinggi Total Wadah (cm)</label>
+                            <input type="number" step="0.1" name="tank_height_cm"
+                                value="{{ old('tank_height_cm', $setting->tank_height_cm ?? 30) }}"
+                                class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5 transition"
+                                placeholder="Jarak dasar sampai bibir atas">
                         </div>
 
-                        <div x-show="shape === 'tabung'" style="display: none;" class="animate-fade-in-down">
-                            <label class="block text-xs text-gray-500 mb-1">Diameter (cm)</label>
+                        <div x-show="shape === 'tabung_tegak' || shape === 'tabung_tidur'" style="display: none;"
+                            class="animate-fade-in-down">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Diameter (cm)
+                                <span x-show="shape === 'tabung_tidur'" class="text-xs text-blue-500">(Sekaligus
+                                    Tinggi Wadah)</span>
+                            </label>
                             <input type="number" step="0.1" name="tank_diameter"
-                                value="{{ $setting->tank_diameter ?? 40 }}"
+                                value="{{ old('tank_diameter', $setting->tank_diameter ?? 40) }}"
                                 class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5"
                                 placeholder="Garis tengah lingkaran">
                         </div>
-                    </div>
-                </div>
 
-                <div class="mt-8 flex justify-center  md:justify-end">
-                    <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 font-semibold flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4">
-                            </path>
-                        </svg>
-                        <span class="text-sm">
-                            Simpan & Mulai Tanam Baru
-                        </span>
-                    </button>
+                        <div class="grid grid-cols-2 gap-4 animate-fade-in-down">
+
+                            <div x-show="shape === 'kotak' || shape === 'tabung_tidur'">
+                                <label class="block text-xs text-gray-500 mb-1">Panjang (cm)</label>
+                                <input type="number" step="0.1" name="tank_length"
+                                    value="{{ old('tank_length', $setting->tank_length ?? 50) }}"
+                                    class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5">
+                            </div>
+
+                            <div x-show="shape === 'kotak'">
+                                <label class="block text-xs text-gray-500 mb-1">Lebar (cm)</label>
+                                <input type="number" step="0.1" name="tank_width"
+                                    value="{{ old('tank_width', $setting->tank_width ?? 30) }}"
+                                    class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2.5">
+                            </div>
+                        </div>
+
+                        <div class="mt-8 flex justify-center  md:justify-end">
+                            <button type="submit"
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 font-semibold flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4">
+                                    </path>
+                                </svg>
+                                <span class="text-sm">
+                                    Simpan & Mulai Tanam Baru
+                                </span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

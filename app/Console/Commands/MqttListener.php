@@ -60,22 +60,73 @@ class MqttListener extends Command
                         return;
                     }
 
-                    // --- 3. LOGIKA KA (HITUNG VOLUME AIR SAAT INI) ---
-                    $tinggiAir = $setting->tank_height_cm - $jarakSensor;
-                    if ($tinggiAir < 0) $tinggiAir = 0;
+                    // --- 3. LOGIKA KA (HITUNG VOLUME) ---
 
-                    $luasAlas = $setting->base_area; // Pastikan Model PlantSetting punya Accessor getBaseAreaAttribute
-                    if (!$luasAlas) {
-                        // Fallback hitung manual jika accessor belum dibuat
-                        if ($setting->tank_shape == 'kotak') {
-                            $luasAlas = $setting->tank_length * $setting->tank_width;
-                        } else {
-                            $r = $setting->tank_diameter / 2;
-                            $luasAlas = 3.14 * ($r * $r);
-                        }
+                    // A. Tentukan Dimensi Dasar
+                    $tinggiTotalWadah = 0;
+                    if ($setting->tank_shape == 'tabung_tidur') {
+                        // Jika tidur, tinggi wadah adalah DIAMETER nya
+                        $tinggiTotalWadah = $setting->tank_diameter;
+                    } else {
+                        // Jika kotak/tegak, tinggi wadah adalah TINGGI ASLI
+                        $tinggiTotalWadah = $setting->tank_height_cm;
                     }
 
-                    $volumeLiter = ($luasAlas * $tinggiAir) / 1000;
+                    // B. Hitung Tinggi Air Aktual
+                    $tinggiAir = $tinggiTotalWadah - $jarakSensor;
+                    if ($tinggiAir < 0) $tinggiAir = 0; // Filter minus
+
+                    // C. Hitung Volume Berdasarkan Bentuk
+                    $volumeLiter = 0;
+
+                    // --- RUMUS 1: KOTAK ---
+                    if ($setting->tank_shape == 'kotak') {
+                        $luasAlas = $setting->tank_length * $setting->tank_width;
+                        $volumeLiter = ($luasAlas * $tinggiAir) / 1000;
+
+                        // --- RUMUS 2: TABUNG TEGAK (Silinder Berdiri) ---
+                    } elseif ($setting->tank_shape == 'tabung_tegak') {
+                        // Rumus: Pi x r x r x t
+                        $jariJari = $setting->tank_diameter / 2;
+                        $luasAlas = 3.14159 * ($jariJari * $jariJari);
+                        $volumeLiter = ($luasAlas * $tinggiAir) / 1000;
+
+                        // --- RUMUS 3: TABUNG TIDUR (Silinder Horizontal) ---
+                    } elseif ($setting->tank_shape == 'tabung_tidur') {
+                        // Rumus Tembereng Lingkaran
+                        // V = Luas Penampang Air x Panjang Tabung
+
+                        $r = $setting->tank_diameter / 2; // Jari-jari
+                        $h = $tinggiAir;                  // Tinggi air
+                        $L = $setting->tank_length;       // Panjang tabung ke samping
+
+                        // Validasi fisika (Air tidak boleh melebihi diameter)
+                        if ($h > (2 * $r)) $h = 2 * $r;
+
+                        // Jika air kosong
+                        if ($h <= 0) {
+                            $volumeLiter = 0;
+                        }
+                        // Jika air penuh (sama dengan volume tabung full)
+                        elseif ($h >= (2 * $r)) {
+                            $volumeLiter = (3.14159 * $r * $r * $L) / 1000;
+                        }
+                        // Jika terisi sebagian (Rumus Kompleks)
+                        else {
+                            // Bagian 1: Luas Juring (Sektor)
+                            // acos mengembalikan radian
+                            $term1 = ($r * $r) * acos(($r - $h) / $r);
+
+                            // Bagian 2: Luas Segitiga di atas air
+                            $term2 = ($r - $h) * sqrt((2 * $r * $h) - ($h * $h));
+
+                            // Luas Penampang Air = Bagian 1 - Bagian 2
+                            $luasPenampang = $term1 - $term2;
+
+                            // Volume = Luas x Panjang
+                            $volumeLiter = ($luasPenampang * $L) / 1000;
+                        }
+                    }
 
                     // --- 4. LOGIKA KA (HITUNG DOSIS & PENGENCERAN) ---
                     $saranDosis = 0;

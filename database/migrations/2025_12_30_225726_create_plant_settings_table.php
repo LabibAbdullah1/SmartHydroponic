@@ -17,7 +17,7 @@ return new class extends Migration
             $table->dateTime('started_at')->useCurrent();
 
             $table->integer('target_ppm')->default(800);
-            $table->enum('tank_shape', ['kotak', 'tabung'])->default('kotak');
+            $table->enum('tank_shape', ['kotak', 'tabung_tegak', 'tabung_tidur'])->default('kotak');
 
             // Dimensi
             $table->double('tank_length')->nullable();
