@@ -28,6 +28,7 @@
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
+                {{-- LOGO & JUDUL --}}
                 <div class="flex items-center gap-3">
                     <div class=" text-white p-2 rounded-lg h-16 w-16">
                         <img src="{{ asset('icon-iot.png') }}" alt="">
@@ -35,39 +36,38 @@
                     <div>
                         <h1 class="text-md lg:text-lg font-bold text-gray-900 leading-tight">Smart Hidroponik</h1>
                         <p class="text-xs text-gray-500 font-medium">
-                            Halo,
-                            @if($user)
-                                <span class="text-green-600 font-bold">{{ $user->name }}</span>
-                                ({{ ucfirst($user->role) }})
-                            @else
-                                <span class="text-gray-500 font-bold">Tamu</span>
-                            @endif
+                            powered by Labib.Dev
                         </p>
                     </div>
                 </div>
 
-                {{-- NAVBAR DESKTOP --}}
+                {{-- NAVBAR DESKTOP (MENU) --}}
                 <div class="hidden md:block bg-white">
                     <div class="max-w-7xl mx-auto px-6 py-3 flex gap-4 items-center h-full">
+                        {{-- Link Dashboard --}}
                         <a href="{{ route('dashboard') }}"
                             class="px-5 py-2 rounded-md text-sm font-semibold transition
-                    {{ request()->routeIs('dashboard')
-                        ? 'bg-green-600 text-white shadow'
-                        : 'bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700' }}">
+                {{ request()->routeIs('dashboard')
+                    ? 'bg-green-600 text-white shadow'
+                    : 'bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700' }}">
                             Dashboard
                         </a>
 
+                        {{-- Link Riwayat --}}
                         <a href="{{ route('history.index') }}"
                             class="px-5 py-2 rounded-md text-sm font-semibold transition
-                    {{ request()->routeIs('history.*')
-                        ? 'bg-green-600 text-white shadow'
-                        : 'bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700' }}">
+                {{ request()->routeIs('history.*')
+                    ? 'bg-green-600 text-white shadow'
+                    : 'bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700' }}">
                             Riwayat Tanam
                         </a>
                     </div>
                 </div>
 
+                {{-- BAGIAN KANAN (LOGOUT, STATUS SYSTEM, JAM) --}}
                 <div class="flex items-center gap-4">
+
+                    {{-- Tombol Logout (Hanya Tampil Jika Login) --}}
                     @auth
                         <form action="{{ route('logout') }}" method="POST" class="hidden md:block">
                             @csrf
@@ -77,11 +77,14 @@
                         </form>
                     @endauth
 
-                    <span
-                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/0 text-gray-800 transition-colors duration-300">
-                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                        <span class="text-gray-600">Database Connected</span>
+                    {{-- Badge Status System (Diberi ID agar bisa berubah warna via JS) --}}
+                    <span id="sysStatusBadge"
+                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 transition-colors duration-300">
+                        <span id="sysStatusDot" class="w-2 h-2 bg-gray-500 rounded-full mr-2"></span>
+                        <span id="sysStatusText">Connecting...</span>
                     </span>
+
+                    {{-- Jam Digital --}}
                     <div class="hidden md:flex flex-col items-end mr-2">
                         <span class="text-sm font-semibold text-gray-700">{{ now()->format('d M Y') }}</span>
                         <span class="text-xs text-gray-400" id="clock">00:00:00</span>
@@ -101,7 +104,8 @@
             {{ request()->routeIs('dashboard') ? 'text-green-600 font-bold' : 'text-gray-500 hover:text-green-600' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24"
                         stroke-width="1.8" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.125 1.125 0 011.591 0L21.75 12M4.5 9.75V19.875 c0 .621.504 1.125 1.125 1.125H9.75V15 c0-.621.504-1.125 1.125-1.125h2.25 c.621 0 1.125.504 1.125 1.125v6h4.125 c.621 0 1.125-.504 1.125-1.125V9.75" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.25 12l8.954-8.955a1.125 1.125 0 011.591 0L21.75 12M4.5 9.75V19.875 c0 .621.504 1.125 1.125 1.125H9.75V15 c0-.621.504-1.125 1.125-1.125h2.25 c.621 0 1.125.504 1.125 1.125v6h4.125 c.621 0 1.125-.504 1.125-1.125V9.75" />
                     </svg>
                     <span>Dashboard</span>
                 </a>
@@ -122,7 +126,8 @@
                         @csrf
                         <button type="submit" class="text-red-500 hover:text-red-700 flex flex-col items-center text-xs">
                             <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                             </svg>
                             <span>Keluar</span>
                         </button>
@@ -142,7 +147,8 @@
             </div>
             <div class="flex-1">
                 <h3 class="text-md font-bold text-green-800 mb-1">Riwayat Tanam</h3>
-                <p class="text-sm text-green-600 font-medium leading-relaxed">Rekapitulasi analisis selama periode tanam</p>
+                <p class="text-sm text-green-600 font-medium leading-relaxed">Rekapitulasi analisis selama periode tanam
+                </p>
             </div>
         </div>
 
@@ -167,16 +173,30 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Tanaman</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Periode</th>
-                                <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Durasi</th>
-                                <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Avg PPM</th>
-                                <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Suhu Ekstrim</th>
-                                <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">Skor Nutrisi</th>
+                                <th scope="col"
+                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    Tanaman</th>
+                                <th scope="col"
+                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    Periode</th>
+                                <th scope="col"
+                                    class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    Durasi</th>
+                                <th scope="col"
+                                    class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    Avg PPM</th>
+                                <th scope="col"
+                                    class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    Suhu Ekstrim</th>
+                                <th scope="col"
+                                    class="px-6 py-4 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                    Skor Nutrisi</th>
 
                                 {{-- KOLOM HAPUS (HANYA ADMIN) --}}
-                                @if($isAdmin)
-                                    <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-red-600 uppercase tracking-wider">Aksi</th>
+                                @if ($isAdmin)
+                                    <th scope="col"
+                                        class="px-6 py-4 text-center text-xs font-bold text-red-600 uppercase tracking-wider">
+                                        Aksi</th>
                                 @endif
                             </tr>
                         </thead>
@@ -185,15 +205,20 @@
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10 bg-green-100 rounded-full flex items-center justify-center text-green-600">🌱</div>
+                                            <div
+                                                class="flex-shrink-0 h-10 w-10 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                                                🌱</div>
                                             <div class="ml-4">
-                                                <div class="text-sm font-bold text-gray-900">{{ $history->plant_name }}</div>
-                                                <div class="text-xs text-gray-500">{{ $history->finished_at->format('d M Y, H:i') }} (Panen)</div>
+                                                <div class="text-sm font-bold text-gray-900">
+                                                    {{ $history->plant_name }}</div>
+                                                <div class="text-xs text-gray-500">
+                                                    {{ $history->finished_at->format('d M Y, H:i') }} (Panen)</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{ $history->started_at->format('d M') }} - {{ $history->finished_at->format('d M Y') }}</div>
+                                        <div class="text-sm text-gray-900">{{ $history->started_at->format('d M') }} -
+                                            {{ $history->finished_at->format('d M Y') }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         @php
@@ -202,11 +227,14 @@
                                             $hours = intdiv($totalMinutes % 1440, 60);
                                             $minutes = $totalMinutes % 60;
                                         @endphp
-                                        <span class="px-2 py-1 inline-flex text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                                            {{ $days }} Hari {{ $hours }} Jam {{ $minutes }} Menit
+                                        <span
+                                            class="px-2 py-1 inline-flex text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            {{ $days }} Hari {{ $hours }} Jam {{ $minutes }}
+                                            Menit
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600 font-mono">
+                                    <td
+                                        class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600 font-mono">
                                         {{ $history->avg_ppm }} PPM
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
@@ -216,21 +244,29 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         @php
                                             $score = $history->ppm_accuracy_score;
-                                            $colorClass = $score >= 80 ? 'bg-green-100 text-green-800' : ($score >= 50 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800');
+                                            $colorClass =
+                                                $score >= 80
+                                                    ? 'bg-green-100 text-green-800'
+                                                    : ($score >= 50
+                                                        ? 'bg-yellow-100 text-yellow-800'
+                                                        : 'bg-red-100 text-red-800');
                                         @endphp
-                                        <span class="px-3 py-1 inline-flex text-sm font-bold rounded-lg {{ $colorClass }}">
+                                        <span
+                                            class="px-3 py-1 inline-flex text-sm font-bold rounded-lg {{ $colorClass }}">
                                             {{ $score }}%
                                         </span>
                                     </td>
 
                                     {{-- TOMBOL HAPUS (HANYA ADMIN) --}}
-                                    @if($isAdmin)
+                                    @if ($isAdmin)
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
-                                            <form action="{{ route('history.destroy', $history->id) }}" method="POST"
+                                            <form action="{{ route('history.destroy', $history->id) }}"
+                                                method="POST"
                                                 onsubmit="return confirm('Apakah Anda yakin ingin menghapus data riwayat ini?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="text-red-500 hover:text-red-700 font-bold text-sm hover:underline">
+                                                <button type="submit"
+                                                    class="text-red-500 hover:text-red-700 font-bold text-sm hover:underline">
                                                     Hapus
                                                 </button>
                                             </form>
@@ -261,4 +297,5 @@
     </script>
 
 </body>
+
 </html>
