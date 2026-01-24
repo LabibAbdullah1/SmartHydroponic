@@ -78,14 +78,14 @@
                     @endauth
 
                     {{-- Badge Status System (Diberi ID agar bisa berubah warna via JS) --}}
-                    <span id="sysStatusBadge"
-                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 transition-colors duration-300">
-                        <span id="sysStatusDot" class="w-2 h-2 bg-gray-500 rounded-full mr-2"></span>
-                        <span id="sysStatusText">Connecting...</span>
+                    <span
+                        class="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 transition-colors duration-300">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                        <span>Database Connected</span>
                     </span>
 
                     {{-- Jam Digital --}}
-                    <div class="hidden md:flex flex-col items-end mr-2">
+                    <div class="hidden lg:flex flex-col items-end mr-2">
                         <span class="text-sm font-semibold text-gray-700">{{ now()->format('d M Y') }}</span>
                         <span class="text-xs text-gray-400" id="clock">00:00:00</span>
                     </div>
