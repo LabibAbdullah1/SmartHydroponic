@@ -557,68 +557,125 @@
             options: commonOptions
         });
 
+// --- REALTIME UPDATE LOGIC (PERBAIKAN PRIORITAS) ---
         function updateCharts() {
-            fetch('/sensor-data').then(response => response.json()).then(data => {
-                if (data.labels && data.labels.length > 0) {
-                    chartPPM.data.labels = data.labels;
-                    chartPPM.data.datasets[0].data = data.ppm;
-                    chartPPM.update('none');
-                    chartSuhu.data.labels = data.labels;
-                    chartSuhu.data.datasets[0].data = data.temp;
-                    chartSuhu.update('none');
-                }
-                const box = document.getElementById('kaAlertBox'),
-                    msg = document.getElementById('kaMessage'),
-                    title = document.getElementById('kaTitle'),
-                    iconBox = document.getElementById('kaIconBox'),
-                    icon = document.getElementById('kaIcon');
-                msg.innerText = data.ka_message;
-                box.className =
-                    "p-6 rounded-2xl shadow-sm mb-8 flex items-start gap-4 transition-all duration-500 border";
-                iconBox.className = "flex-shrink-0 p-3 rounded-xl";
-                if (data.ka_status === 'WARNING' || data.ka_status === 'ERROR') {
-                    box.classList.add('bg-yellow-50', 'border-yellow-200');
-                    iconBox.classList.add('bg-yellow-100', 'text-yellow-600');
-                    title.innerText = "Tindakan Diperlukan";
-                    title.className = "text-md font-bold text-yellow-600 mb-1";
-                    msg.className = "text-sm text-yellow-600 font-medium leading-relaxed";
-                    icon.innerHTML =
-                        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />';
-                } else if (data.ka_status === 'OVER') {
-                    box.classList.add('bg-red-50', 'border-red-600');
-                    iconBox.classList.add('bg-red-200', 'text-red-600');
-                    title.innerText = "Nutrisi Berlebih";
-                    title.className = "text-md font-bold text-red-800 mb-1";
-                    msg.className = "text-sm text-red-700 font-medium leading-relaxed";
-                    icon.innerHTML =
-                        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />';
-                } else {
-                    box.classList.add('bg-white', 'border-green-600');
-                    iconBox.classList.add('bg-green-200', 'text-green-600');
-                    title.innerText = "Kondisi Optimal";
-                    title.className = "text-md font-bold text-green-600 mb-1";
-                    msg.className = "text-sm text-green-600 font-medium leading-relaxed";
-                    icon.innerHTML =
-                        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />';
-                }
+            fetch('/sensor-data')
+                .then(response => response.json())
+                .then(data => {
+                    // 1. Update Chart Data (Jika ada)
+                    if (data.labels && data.labels.length > 0) {
+                        chartPPM.data.labels = data.labels;
+                        chartPPM.data.datasets[0].data = data.ppm;
+                        chartPPM.update('none');
 
-                const badge = document.getElementById('sysStatusBadge'),
-                    dot = document.getElementById('sysStatusDot'),
-                    text = document.getElementById('sysStatusText');
-                if (data.is_online) {
-                    text.innerText = "System Online";
-                    badge.classList.remove('bg-gray-100', 'text-gray-800', 'bg-red-100', 'text-red-800');
-                    badge.classList.add('bg-green-100', 'text-green-800');
-                    dot.classList.remove('bg-gray-500', 'bg-red-500');
-                    dot.classList.add('bg-green-500', 'animate-pulse');
-                } else {
-                    text.innerText = "System Offline";
-                    badge.classList.remove('bg-green-100', 'text-green-800', 'bg-gray-100', 'text-gray-800');
-                    badge.classList.add('bg-red-100', 'text-red-800');
-                    dot.classList.remove('bg-green-500', 'animate-pulse', 'bg-gray-500');
-                    dot.classList.add('bg-red-500');
-                }
-            }).catch(e => console.error(e));
+                        chartSuhu.data.labels = data.labels;
+                        chartSuhu.data.datasets[0].data = data.temp;
+                        chartSuhu.update('none');
+                    }
+
+                    // Ambil Elemen HTML
+                    const box = document.getElementById('kaAlertBox');
+                    const msg = document.getElementById('kaMessage');
+                    const title = document.getElementById('kaTitle');
+                    const iconBox = document.getElementById('kaIconBox');
+                    const icon = document.getElementById('kaIcon');
+
+                    const badge = document.getElementById('sysStatusBadge');
+                    const dot = document.getElementById('sysStatusDot');
+                    const text = document.getElementById('sysStatusText');
+
+                    // Reset Class Dasar dulu
+                    box.className = "p-6 rounded-2xl shadow-sm mb-8 flex items-start gap-4 transition-all duration-500 border";
+                    iconBox.className = "flex-shrink-0 p-3 rounded-xl";
+
+                    // ===============================================
+                    // LOGIKA UTAMA: CEK OFFLINE DULUAN (PRIORITAS 1)
+                    // ===============================================
+
+                    if (!data.is_online) {
+                        // --- SKENARIO 1: SISTEM OFFLINE (ABU-ABU) ---
+
+                        // 1. Ubah Tampilan Box jadi Abu-abu
+                        box.classList.add('bg-gray-50', 'border-gray-200');
+                        iconBox.classList.add('bg-gray-200', 'text-gray-500');
+
+                        title.innerText = "Sistem Offline";
+                        title.className = "text-md font-bold text-gray-600 mb-1";
+                        msg.innerText = "Perangkat tidak terhubung. Data yang ditampilkan adalah data terakhir.";
+                        msg.className = "text-sm text-gray-500 font-medium leading-relaxed";
+
+                        // Icon Awan Silang / Mati
+                        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />';
+
+                        // 2. Ubah Badge jadi Merah
+                        text.innerText = "System Offline";
+                        badge.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 transition-colors duration-300";
+                        dot.className = "w-2 h-2 bg-red-500 rounded-full mr-2"; // Tidak berkedip
+
+                    } else {
+                        // --- SKENARIO 2: SISTEM ONLINE (HIJAU/KUNING/MERAH) ---
+
+                        // 1. Ubah Badge jadi Hijau (Online)
+                        text.innerText = "System Online";
+                        badge.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 transition-colors duration-300";
+                        dot.className = "w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"; // Berkedip
+
+                        // 2. Baru Cek Status Nutrisi (KA)
+                        msg.innerText = data.ka_message;
+
+                        if (data.ka_status === 'WARNING' || data.ka_status === 'ERROR') {
+                            // KUNING
+                            box.classList.add('bg-yellow-50', 'border-yellow-200');
+                            iconBox.classList.add('bg-yellow-100', 'text-yellow-600');
+                            title.innerText = "Tindakan Diperlukan";
+                            title.className = "text-md font-bold text-yellow-600 mb-1";
+                            msg.className = "text-sm text-yellow-600 font-medium leading-relaxed";
+                            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />';
+
+                        } else if (data.ka_status === 'OVER') {
+                            // MERAH (Overdosis)
+                            box.classList.add('bg-red-50', 'border-red-600');
+                            iconBox.classList.add('bg-red-200', 'text-red-600');
+                            title.innerText = "Nutrisi Berlebih";
+                            title.className = "text-md font-bold text-red-800 mb-1";
+                            msg.className = "text-sm text-red-700 font-medium leading-relaxed";
+                            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />';
+
+                        } else {
+                            // HIJAU (Optimal)
+                            box.classList.add('bg-white', 'border-green-600');
+                            iconBox.classList.add('bg-green-200', 'text-green-600');
+                            title.innerText = "Kondisi Optimal";
+                            title.className = "text-md font-bold text-green-600 mb-1";
+                            msg.className = "text-sm text-green-600 font-medium leading-relaxed";
+                            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+
+                    // FALLBACK: Jika Fetch Error (Server Mati), Paksa Tampilan Offline
+                    const box = document.getElementById('kaAlertBox');
+                    const title = document.getElementById('kaTitle');
+                    const msg = document.getElementById('kaMessage');
+                    const iconBox = document.getElementById('kaIconBox');
+                    const badge = document.getElementById('sysStatusBadge');
+                    const dot = document.getElementById('sysStatusDot');
+                    const text = document.getElementById('sysStatusText');
+
+                    // Style Box Error
+                    box.className = "p-6 rounded-2xl shadow-sm mb-8 flex items-start gap-4 transition-all duration-500 border bg-gray-50 border-gray-200";
+                    iconBox.className = "flex-shrink-0 p-3 rounded-xl bg-gray-200 text-gray-500";
+                    title.innerText = "Connection Error";
+                    title.className = "text-md font-bold text-gray-600 mb-1";
+                    msg.innerText = "Gagal terhubung ke server.";
+
+                    // Style Badge Error
+                    text.innerText = "Server Error";
+                    badge.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800";
+                    dot.className = "w-2 h-2 bg-red-500 rounded-full mr-2";
+                });
         }
         updateCharts();
         setInterval(updateCharts, 2000);
