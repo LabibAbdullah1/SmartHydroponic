@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DeviceSeeder::class,
             PlantSettingSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }

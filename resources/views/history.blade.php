@@ -20,6 +20,11 @@
 
 <body class="bg-gray-50 text-gray-800 antialiased">
 
+    @php
+        $user = auth()->user();
+        $isAdmin = $user && $user->role === 'admin';
+    @endphp
+
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -29,15 +34,21 @@
                     </div>
                     <div>
                         <h1 class="text-md lg:text-lg font-bold text-gray-900 leading-tight">Smart Hidroponik</h1>
-                        <p class="text-xs text-gray-500 font-medium">Powered by Labib.Dev</p>
+                        <p class="text-xs text-gray-500 font-medium">
+                            Halo,
+                            @if($user)
+                                <span class="text-green-600 font-bold">{{ $user->name }}</span>
+                                ({{ ucfirst($user->role) }})
+                            @else
+                                <span class="text-gray-500 font-bold">Tamu</span>
+                            @endif
+                        </p>
                     </div>
                 </div>
 
                 {{-- NAVBAR DESKTOP --}}
                 <div class="hidden md:block bg-white">
-                    <div class="max-w-7xl mx-auto px-6 py-3 flex gap-4">
-
-                        {{-- Dashboard --}}
+                    <div class="max-w-7xl mx-auto px-6 py-3 flex gap-4 items-center h-full">
                         <a href="{{ route('dashboard') }}"
                             class="px-5 py-2 rounded-md text-sm font-semibold transition
                     {{ request()->routeIs('dashboard')
@@ -46,7 +57,6 @@
                             Dashboard
                         </a>
 
-                        {{-- Riwayat Tanam --}}
                         <a href="{{ route('history.index') }}"
                             class="px-5 py-2 rounded-md text-sm font-semibold transition
                     {{ request()->routeIs('history.*')
@@ -54,15 +64,23 @@
                         : 'bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700' }}">
                             Riwayat Tanam
                         </a>
-
                     </div>
                 </div>
 
                 <div class="flex items-center gap-4">
+                    @auth
+                        <form action="{{ route('logout') }}" method="POST" class="hidden md:block">
+                            @csrf
+                            <button type="submit" class="text-red-500 hover:text-red-700 text-sm font-bold transition">
+                                Logout
+                            </button>
+                        </form>
+                    @endauth
+
                     <span
                         class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/0 text-gray-800 transition-colors duration-300">
-                        <span class="w-2 h-2 rounded-full mr-2"></span>
-                        <span class="text-white">Connecting...</span>
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                        <span class="text-gray-600">Database Connected</span>
                     </span>
                     <div class="hidden md:flex flex-col items-end mr-2">
                         <span class="text-sm font-semibold text-gray-700">{{ now()->format('d M Y') }}</span>
@@ -77,42 +95,41 @@
 
         {{-- NAVBAR MOBILE --}}
         <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg">
-            <div class="flex h-16">
-
-                {{-- Dashboard --}}
+            <div class="flex h-16 justify-around items-center px-4">
                 <a href="{{ route('dashboard') }}"
-                    class="flex-1 flex flex-col items-center justify-center text-xs transition
+                    class="flex flex-col items-center justify-center text-xs transition
             {{ request()->routeIs('dashboard') ? 'text-green-600 font-bold' : 'text-gray-500 hover:text-green-600' }}">
-
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24"
                         stroke-width="1.8" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.125 1.125 0 011.591 0L21.75 12M4.5 9.75V19.875
-                    c0 .621.504 1.125 1.125 1.125H9.75V15
-                    c0-.621.504-1.125 1.125-1.125h2.25
-                    c.621 0 1.125.504 1.125 1.125v6h4.125
-                    c.621 0 1.125-.504 1.125-1.125V9.75" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.125 1.125 0 011.591 0L21.75 12M4.5 9.75V19.875 c0 .621.504 1.125 1.125 1.125H9.75V15 c0-.621.504-1.125 1.125-1.125h2.25 c.621 0 1.125.504 1.125 1.125v6h4.125 c.621 0 1.125-.504 1.125-1.125V9.75" />
                     </svg>
-
                     <span>Dashboard</span>
                 </a>
 
-                {{-- Riwayat Tanam --}}
                 <a href="{{ route('history.index') }}"
-                    class="flex-1 flex flex-col items-center justify-center text-xs transition
+                    class="flex flex-col items-center justify-center text-xs transition
             {{ request()->routeIs('history.*') ? 'text-green-600 font-bold' : 'text-gray-500 hover:text-green-600' }}">
-
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-
                     <span>Riwayat</span>
                 </a>
 
+                @auth
+                    <form action="{{ route('logout') }}" method="POST" class="flex flex-col items-center justify-center">
+                        @csrf
+                        <button type="submit" class="text-red-500 hover:text-red-700 flex flex-col items-center text-xs">
+                            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                            <span>Keluar</span>
+                        </button>
+                    </form>
+                @endauth
             </div>
         </div>
-
 
         <div id="kaAlertBox"
             class="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm mb-8 flex items-start gap-4 transition-all duration-500">
@@ -125,8 +142,7 @@
             </div>
             <div class="flex-1">
                 <h3 class="text-md font-bold text-green-800 mb-1">Riwayat Tanam</h3>
-                <p class="text-sm text-green-600 font-medium leading-relaxed">Rekapitulasi analisis selama priode tanam
-                </p>
+                <p class="text-sm text-green-600 font-medium leading-relaxed">Rekapitulasi analisis selama periode tanam</p>
             </div>
         </div>
 
@@ -151,24 +167,17 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col"
-                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                    Tanaman</th>
-                                <th scope="col"
-                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                    Periode</th>
-                                <th scope="col"
-                                    class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                    Durasi</th>
-                                <th scope="col"
-                                    class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                    Avg PPM</th>
-                                <th scope="col"
-                                    class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                    Suhu Ekstrim</th>
-                                <th scope="col"
-                                    class="px-6 py-4 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">
-                                    Skor Nutrisi</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Tanaman</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Periode</th>
+                                <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Durasi</th>
+                                <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Avg PPM</th>
+                                <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Suhu Ekstrim</th>
+                                <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">Skor Nutrisi</th>
+
+                                {{-- KOLOM HAPUS (HANYA ADMIN) --}}
+                                @if($isAdmin)
+                                    <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-red-600 uppercase tracking-wider">Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -176,40 +185,28 @@
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
-                                            <div
-                                                class="flex-shrink-0 h-10 w-10 bg-green-100 rounded-full flex items-center justify-center text-green-600">
-                                                🌱
-                                            </div>
+                                            <div class="flex-shrink-0 h-10 w-10 bg-green-100 rounded-full flex items-center justify-center text-green-600">🌱</div>
                                             <div class="ml-4">
-                                                <div class="text-sm font-bold text-gray-900">
-                                                    {{ $history->plant_name }}
-                                                </div>
-                                                <div class="text-xs text-gray-500">
-                                                    {{ $history->finished_at->format('d M Y, H:i') }} (Panen)</div>
+                                                <div class="text-sm font-bold text-gray-900">{{ $history->plant_name }}</div>
+                                                <div class="text-xs text-gray-500">{{ $history->finished_at->format('d M Y, H:i') }} (Panen)</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">{{ $history->started_at->format('d M') }} -
-                                            {{ $history->finished_at->format('d M Y') }}</div>
+                                        <div class="text-sm text-gray-900">{{ $history->started_at->format('d M') }} - {{ $history->finished_at->format('d M Y') }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         @php
                                             $totalMinutes = $history->started_at->diffInMinutes($history->finished_at);
-
-                                            $days = intdiv($totalMinutes, 1440); // 24 * 60
+                                            $days = intdiv($totalMinutes, 1440);
                                             $hours = intdiv($totalMinutes % 1440, 60);
                                             $minutes = $totalMinutes % 60;
                                         @endphp
-
-                                        <span
-                                            class="px-2 py-1 inline-flex text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                                            {{ $days }} Hari {{ $hours }} Jam {{ $minutes }}
-                                            Menit
+                                        <span class="px-2 py-1 inline-flex text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            {{ $days }} Hari {{ $hours }} Jam {{ $minutes }} Menit
                                         </span>
                                     </td>
-                                    <td
-                                        class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600 font-mono">
+                                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600 font-mono">
                                         {{ $history->avg_ppm }} PPM
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
@@ -219,18 +216,26 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         @php
                                             $score = $history->ppm_accuracy_score;
-                                            $colorClass = 'bg-red-100 text-red-800';
-                                            if ($score >= 80) {
-                                                $colorClass = 'bg-green-100 text-green-800';
-                                            } elseif ($score >= 50) {
-                                                $colorClass = 'bg-yellow-100 text-yellow-800';
-                                            }
+                                            $colorClass = $score >= 80 ? 'bg-green-100 text-green-800' : ($score >= 50 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800');
                                         @endphp
-                                        <span
-                                            class="px-3 py-1 inline-flex text-sm font-bold rounded-lg {{ $colorClass }}">
+                                        <span class="px-3 py-1 inline-flex text-sm font-bold rounded-lg {{ $colorClass }}">
                                             {{ $score }}%
                                         </span>
                                     </td>
+
+                                    {{-- TOMBOL HAPUS (HANYA ADMIN) --}}
+                                    @if($isAdmin)
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <form action="{{ route('history.destroy', $history->id) }}" method="POST"
+                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus data riwayat ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-500 hover:text-red-700 font-bold text-sm hover:underline">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>
@@ -248,14 +253,12 @@
     <script>
         setInterval(() => {
             const now = new Date();
-            const timeString = now.toLocaleTimeString();
             const clockElement = document.getElementById('clock');
             if (clockElement) {
-                clockElement.innerText = timeString;
+                clockElement.innerText = now.toLocaleTimeString();
             }
         }, 1000);
     </script>
 
 </body>
-
 </html>
