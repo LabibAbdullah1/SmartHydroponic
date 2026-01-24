@@ -73,9 +73,9 @@ class DashboardController extends Controller
 
         $latest = $data->first();
         $sortedData = $data->sortBy('received_at');
+        $treshold = 20;
 
-        // Cek Online (toleransi 60 detik)
-        $isOnline = $latest && $latest->received_at->diffInSeconds(now()) < 60;
+        $isOnline = $latest && $latest->received_at->diffInSeconds(now()) < $treshold;
 
         return response()->json([
             'labels' => $sortedData->pluck('received_at')->map(fn($d) => $d->format('H:i:s')),
