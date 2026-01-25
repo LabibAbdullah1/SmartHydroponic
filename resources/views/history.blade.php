@@ -97,7 +97,7 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {{-- NAVBAR MOBILE --}}
-        <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg">
+        <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg rounded-tl-2xl rounded-tr-2xl">
             <div class="flex h-16 justify-around items-center px-4">
                 <a href="{{ route('dashboard') }}"
                     class="flex flex-col items-center justify-center text-xs transition
