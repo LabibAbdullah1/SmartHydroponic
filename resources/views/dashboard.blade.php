@@ -107,7 +107,7 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {{-- NAVBAR MOBILE --}}
-        <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg">
+        <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg rounded-tl-2xl rounded-tr-2xl">
             <div class="flex h-16 justify-around items-center px-4">
                 <a href="{{ route('dashboard') }}"
                     class="flex flex-col items-center justify-center text-xs transition
@@ -117,7 +117,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M2.25 12l8.954-8.955a1.125 1.125 0 011.591 0L21.75 12M4.5 9.75V19.875 c0 .621.504 1.125 1.125 1.125H9.75V15 c0-.621.504-1.125 1.125-1.125h2.25 c.621 0 1.125.504 1.125 1.125v6h4.125 c.621 0 1.125-.504 1.125-1.125V9.75" />
                     </svg>
-                    <span>Dashboard</span>
+                    <span>Home</span>
                 </a>
 
                 <a href="{{ route('history.index') }}"
@@ -480,9 +480,37 @@
         const commonOptions = {
             responsive: true,
             maintainAspectRatio: false,
+            // 1. TAMBAHAN PENTING: Agar hover lebih mudah (tidak perlu kena titik pas)
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
             plugins: {
                 legend: {
                     display: false
+                },
+                // 2. TAMBAHAN PENTING: Mengatur tampilan Kotak Angka (Tooltip)
+                tooltip: {
+                    enabled: true,
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)', // Background Putih
+                    titleColor: '#1f2937', // Warna Judul Hitam
+                    bodyColor: '#1f2937',  // Warna Angka Hitam
+                    borderColor: '#e5e7eb', // Border abu-abu
+                    borderWidth: 1,
+                    padding: 10,
+                    displayColors: true,
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += context.parsed.y;
+                            }
+                            return label;
+                        }
+                    }
                 }
             },
             scales: {
@@ -504,11 +532,13 @@
             },
             elements: {
                 point: {
-                    radius: 0,
-                    hoverRadius: 6
+                    radius: 0,       // Titik default sembunyi
+                    hoverRadius: 6,  // Titik muncul besar saat di-hover
+                    hitRadius: 10    // Area deteksi diperluas
                 },
                 line: {
-                    borderWidth: 3
+                    borderWidth: 3,
+                    tension: 0.4 // Garis melengkung halus
                 }
             }
         };
@@ -722,10 +752,10 @@
                 </p>
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-700 mb-1 ml-1">Email Address</label>
-                        <input type="email" id="swal-input1"
+                        <label class="block text-xs font-semibold text-gray-700 mb-1 ml-1">Username</label>
+                        <input type="text" id="swal-input1"
                             class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 block p-3 outline-none transition-all placeholder-gray-400"
-                            placeholder="admin@hidroponik.com">
+                            placeholder="username">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 mb-1 ml-1">Password</label>

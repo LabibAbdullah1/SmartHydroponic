@@ -6,17 +6,17 @@ use Illuminate\Http\Request;
 use App\Models\Device;
 use App\Models\Telemetry;
 use App\Models\PlantSetting;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $setting = PlantSetting::first();
+        $setting = PlantSetting::first('*');
 
         // Auto-fix jika started_at kosong
         if ($setting && !$setting->started_at) {
-            $setting->update(['started_at' => now()]);
+            $setting->fill(['started_at' => now()])->save();
         }
 
         // 1. Ambil Device
@@ -33,12 +33,12 @@ class DashboardController extends Controller
             ]);
         }
 
-        // 2. Ambil Data Grafik (20 data terakhir)
+        // 2. Ambil Data Grafik (10 data terakhir)
         $data = collect([]);
         if ($device) {
             $data = Telemetry::where('device_id', $device->id)
                 ->orderBy('received_at', 'desc')
-                ->take(20)
+                ->take(10)
                 ->get()
                 ->sortBy('received_at');
         }

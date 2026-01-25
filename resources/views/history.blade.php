@@ -107,7 +107,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M2.25 12l8.954-8.955a1.125 1.125 0 011.591 0L21.75 12M4.5 9.75V19.875 c0 .621.504 1.125 1.125 1.125H9.75V15 c0-.621.504-1.125 1.125-1.125h2.25 c.621 0 1.125.504 1.125 1.125v6h4.125 c.621 0 1.125-.504 1.125-1.125V9.75" />
                     </svg>
-                    <span>Dashboard</span>
+                    <span>Home</span>
                 </a>
 
                 <a href="{{ route('history.index') }}"
@@ -260,13 +260,15 @@
                                     {{-- TOMBOL HAPUS (HANYA ADMIN) --}}
                                     @if ($isAdmin)
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
-                                            <form action="{{ route('history.destroy', $history->id) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus data riwayat ini?');">
+                                            {{-- Berikan ID unik pada form berdasarkan ID history --}}
+                                            <form id="delete-form-{{ $history->id }}"
+                                                action="{{ route('history.destroy', $history->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit"
-                                                    class="text-red-500 hover:text-red-700 font-bold text-sm hover:underline">
+
+                                                {{-- Ubah type jadi 'button' dan tambahkan onclick --}}
+                                                <button type="button" onclick="confirmDelete('{{ $history->id }}')"
+                                                    class="text-red-500 hover:text-red-700 font-bold text-sm hover:underline transition-colors">
                                                     Hapus
                                                 </button>
                                             </form>
@@ -285,7 +287,7 @@
         </footer>
 
     </main>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         setInterval(() => {
             const now = new Date();
@@ -294,6 +296,33 @@
                 clockElement.innerText = now.toLocaleTimeString();
             }
         }, 1000);
+
+        // --- FUNGSI HAPUS DENGAN SWEETALERT ---
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Hapus Riwayat?',
+                text: "Data yang dihapus tidak dapat dikembalikan lagi.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true,
+                buttonsStyling: false, // Matikan style bawaan
+                customClass: {
+                    popup: 'rounded-2xl p-6 bg-white shadow-xl',
+                    title: 'text-lg font-bold text-gray-800',
+                    htmlContainer: 'text-sm text-gray-500',
+                    // Tombol Konfirmasi Merah (Bahaya)
+                    confirmButton: 'bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-5 rounded-lg text-sm ml-2 transition-all shadow-md',
+                    // Tombol Batal Abu-abu
+                    cancelButton: 'bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium py-2 px-5 rounded-lg text-sm transition-all'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
     </script>
 
 </body>

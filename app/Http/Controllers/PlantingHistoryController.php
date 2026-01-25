@@ -71,4 +71,12 @@ class PlantingHistoryController extends Controller
         return back()->with('success', "🎉 Panen Berhasil! Skor Kualitas Nutrisi: {$score}%");
     }
 
+    public function destroy($id)
+    {
+        $history = PlantingHistory::findOrFail($id);
+        $history->delete();
+
+        return back()->with('success', 'Data history berhasil dihapus.');
+    }
+
 }
